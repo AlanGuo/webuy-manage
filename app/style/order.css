@@ -1,0 +1,22 @@
+
+/* ----------- order detail ----------- */
+.infor-detail{
+	padding:0 12px 10px;
+}
+.infor-detail .tb-info{
+	width:100%;
+}
+	.tb-info tr > td:first-child{
+		width:80px;
+		text-align: right;
+		font-weight: bold;
+		color:#928F8F;
+	}
+	.tb-info th{
+		padding:5px;
+	}
+	.tb-info td{
+		border-top: 1px dotted #ccc;
+		padding:5px;
+		line-height: 22px;
+	}

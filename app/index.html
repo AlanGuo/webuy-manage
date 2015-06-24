@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="webapp">
+  <meta name="author" content="alan">
+  
+  <title>WebApp</title>
+  
+  <!--for vendor style-->
+  <!-- build:css(app) style/vendor.css -->
+  <!-- bower:css -->
+  <!-- endbower -->
+  <!-- endbuild -->
+
+  <!--for main style-->
+  <!-- build:css({tmp,app}) style/main.css -->
+  <link rel="stylesheet" href="style/global.css">
+  <link rel="stylesheet" href="style/common.css">
+  <link rel="stylesheet" href="style/login.css">
+  <link rel="stylesheet" href="style/order.css">
+  <link rel="stylesheet" href="style/table.css">
+  <link rel="stylesheet" href="style/add_new.css">
+  <!-- endbuild -->
+  <!-- build:css({tmp,app}) style/ie8.css -->
+  <!--[if LTE IE 8]>
+  <link rel="stylesheet" href="style/ie8.css">
+  <![endif]-->
+  <!-- endbuild -->
+</head>
+
+
+
+<body>
+
+    <!-- Add your site or application content here -->
+    <div class="wrapper-all" id="wrapper-all">
+      <!--loading start-->
+      <style type="text/css">
+        /* --------------- loading --------------- */
+        /*load 1*/
+        @keyframes load{
+          0%{background: #ddd;transform:scale(0);}
+          50%{background: #666;transform:scale(1);}
+          100%{background: #ddd;transform:scale(0);}
+        }
+        @-webkit-keyframes load{
+          0%{background: #ddd;-webkit-transform:scale(0);}
+          50%{background: #666;-webkit-transform:scale(1);}
+          100%{background: #ddd;-webkit-transform:scale(0);}
+        }
+        @-moz-keyframes load{
+          0%{background: #ddd;-moz-transform:scale(0);}
+          50%{background: #666;-moz-transform:scale(1);}
+          100%{background: #ddd;-moz-transform:scale(0);}
+        }
+        @-ms-keyframes load{
+          0%{background: #ddd;-ms-transform:scale(0);}
+          50%{background: #666;-ms-transform:scale(1);}
+          100%{background: #ddd;-ms-transform:scale(0);}
+        }
+        /*load 2*/
+        @keyframes loadb{
+          0%{background: #ddd;transform:scale(0);}
+          12%{background: #ddd;transform:scale(0);}
+          62%{background: #666;transform:scale(1);}
+          100%{background: #ddd;transform:scale(0);}
+        }
+        @-webkit-keyframes loadb{
+          0%{background: #ddd;-webkit-transform:scale(0);}
+          12%{background: #ddd;-webkit-transform:scale(0);}
+          62%{background: #666;-webkit-transform:scale(1);}
+          100%{background: #ddd;-webkit-transform:scale(0);}
+        }
+        @-moz-keyframes loadb{
+          0%{background: #ddd;-moz-transform:scale(0);}
+          12%{background: #ddd;-moz-transform:scale(0);}
+          62%{background: #666;-moz-transform:scale(1);}
+          100%{background: #ddd;-moz-transform:scale(0);}
+        }
+        @-ms-keyframes loadb{
+          0%{background: #ddd;-ms-transform:scale(0);}
+          12%{background: #ddd;-ms-transform:scale(0);}
+          62%{background: #666;-ms-transform:scale(1);}
+          100%{background: #ddd;-ms-transform:scale(0);}
+        }
+
+        /*load 3*/
+        @keyframes loadc{
+          0%{background: #ddd;transform:scale(0);}
+          25%{background: #ddd;transform:scale(0);}
+          75%{background: #666;transform:scale(1);}
+          100%{background: #ddd;transform:scale(0);}
+        }
+        @-webkit-keyframes loadc{
+          0%{background: #ddd;-webkit-transform:scale(0);}
+          25%{background: #ddd;-webkit-transform:scale(0);}
+          75%{background: #666;-webkit-transform:scale(1);}
+          100%{background: #ddd;-webkit-transform:scale(0);}
+        }
+        @-moz-keyframes loadc{
+          0%{background: #ddd;-moz-transform:scale(0);}
+          25%{background: #ddd;-moz-transform:scale(0);}
+          75%{background: #666;-moz-transform:scale(1);}
+          100%{background: #ddd;-moz-transform:scale(0);}
+        }
+        @-ms-keyframes loadc{
+          0%{background: #ddd;-ms-transform:scale(0);}
+          25%{background: #ddd;-ms-transform:scale(0);}
+          75%{background: #666;-ms-transform:scale(1);}
+          100%{background: #ddd;-ms-transform:scale(0);}
+        }
+
+        /*load 4*/
+        @keyframes loadd{
+          0%{background: #ddd;transform:scale(0);}
+          37%{background: #ddd;transform:scale(0);}
+          87%{background: #666;transform:scale(1);}
+          100%{background: #ddd;transform:scale(0);}
+        }
+        @-webkit-keyframes loadd{
+          0%{background: #ddd;-webkit-transform:scale(0);}
+          37%{background: #ddd;-webkit-transform:scale(0);}
+          87%{background: #666;-webkit-transform:scale(1);}
+          100%{background: #ddd;-webkit-transform:scale(0);}
+        }
+        @-moz-keyframes loadd{
+          0%{background: #ddd;-moz-transform:scale(0);}
+          37%{background: #ddd;-moz-transform:scale(0);}
+          87%{background: #666;-moz-transform:scale(1);}
+          100%{background: #ddd;-moz-transform:scale(0);}
+        }
+        @-ms-keyframes loadd{
+          0%{background: #ddd;-ms-transform:scale(0);}
+          37%{background: #ddd;-ms-transform:scale(0);}
+          87%{background: #666;-ms-transform:scale(1);}
+          100%{background: #ddd;-ms-transform:scale(0);}
+        }
+        .wrap-loading .load-1{animation:load 1s ease infinite;-webkit-animation:load 1s ease infinite;-moz-animation:load 1s ease infinite;-ms-animation:load 1s ease infinite;}
+        .wrap-loading .load-2{animation:loadb 1s ease infinite;-webkit-animation:loadb 1s ease infinite;-moz-animation:loadb 1s ease infinite;-ms-animation:loadb 1s ease infinite;}
+
+        .wrap-loading .load-3{animation:loadc 1s ease infinite;-webkit-animation:loadc 1s ease infinite;-moz-animation:loadc 1s ease infinite;-ms-animation:loadc 1s ease infinite;}
+
+        .wrap-loading .load-4{animation:loadd 1s ease infinite;-webkit-animation:loadd 1s ease infinite;-moz-animation:loadd 1s ease infinite;-ms-animation:loadd 1s ease infinite;}
+        .wrap-loading{padding:2rem 0 2rem 0;text-align: center;}
+        .wrap-loading span{display: inline-block;width:.83rem;height:.83rem;border-radius: 50%;}
+      </style>
+      <div class="wrap-loading" id="page-loader" style="margin-top:30%;">
+        <p>
+          <span class="load-1"></span>
+          <span class="load-2"></span>
+          <span class="load-3"></span>
+          <span class="load-4"></span>
+        </p>
+      </div>
+      <!--loading end-->
+      <div class="header">
+      </div>
+
+      <div class="body">
+        <p  id="body-container">
+        </p>
+      </div>
+
+      <div class="footer">
+      </div>
+    </div>
+   
+    <!-- build:js({tmp,app}) script/vendors.js -->
+    
+    
+    
+    <!-- bower:js -->
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!--主程序脚本-->
+    
+    
+    
+
+    <!--{{localstorage-remove-start}}-->
+    <!-- build:js(.) script/sea.js -->
+    <script type="text/javascript" src="spm_modules/seajs/2.3.0/dist/sea.js"></script>
+    <!-- endbuild -->
+
+
+    
+    <!--{{combo}}-->
+    
+    <!--{{localstorage-remove-end}}-->
+
+    <script type="text/javascript">
+      /*{{localstorage-onload-start}}*/
+      if(window.seajs){
+        
+          seajs.config({
+            base:'/',
+            alias: {
+                //spaseed
+                '$': 'spm_modules/spaseed/1.1.17/lib/zepto',                  
+                'util': 'spm_modules/spaseed/1.1.17/lib/util',
+                'net': 'spm_modules/spaseed/1.1.17/lib/net',
+                'cookie': 'spm_modules/spaseed/1.1.17/lib/cookie',
+                'event': 'spm_modules/spaseed/1.1.17/lib/event',
+                'querystring':'spm_modules/spaseed/1.1.17/lib/querystring',
+                'datamanager': 'spm_modules/spaseed/1.1.17/lib/datamanager',
+                'binder':'spm_modules/spaseed/1.1.17/lib/binder',
+                'formatcheck':'spm_modules/spaseed/1.1.17/lib/formatcheck',
+                'model':'spm_modules/spaseed/1.1.17/lib/model',
+                'stats':'spm_modules/spaseed/1.1.17/lib/stats',
+                'requestconstructor':'spm_modules/spaseed/1.1.17/lib/requestconstructor',
+                'requestmanager':'spm_modules/spaseed/1.1.17/lib/requestmanager',
+                'asyncrequest':'spm_modules/spaseed/1.1.17/lib/asyncrequest',
+                'dialog':'spm_modules/spaseed/1.1.17/lib/dialog',
+                
+                'router': 'spm_modules/spaseed/1.1.17/main/router',
+                'entry': 'spm_modules/spaseed/1.1.17/main/entry',
+
+                //external
+                'config': 'app/script/config',
+                
+                //带pageswitcher的pagemanager
+                'pagemanager': 'spm_modules/spaseed/1.1.17/main/pagemanagerwithtopbottom',
+                'pageswitcher': 'spm_modules/spaseed/1.1.17/lib/pageswitcher',
+                'template': 'app/script/main/template',
+                'apptemplate': 'tmp/view/compiled/view',
+                'request':'app/script/model/request',
+                'env': 'app/script/main/env'
+            }
+          });
+          seajs.use('app/script/entry.js',function(entry){
+            document.getElementById('page-loader').parentNode.removeChild(document.getElementById('page-loader'));
+            if(entry){
+              entry.startup();
+            }
+          });
+        
+      }
+      /*{{localstorage-onload-end}}*/
+      /*{{localstorage}}*/
+    </script>
+    
+    
+    
+
+    
+</body>
+</html>
