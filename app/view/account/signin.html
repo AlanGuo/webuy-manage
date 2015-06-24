@@ -7,12 +7,12 @@
 		<form action="">
 			<!-- 登录 start -->
 			<div class="inpt-account">
-				<input type="text" class="ipt-box" placeholder="请输入手机号">
-				<input type="text" class="ipt-box" placeholder="请输入密码">
+				<input type="text" class="ipt-box" bind-value="postedData.login" placeholder="手机号/邮箱">
+				<input type="text" class="ipt-box" bind-value="postedData.userpassword" placeholder="请输入密码">
 				<p>
 					<input type="text" class="ipt-box" placeholder="请输入验证码">
 					<span class="box-verify">
-						<img src="" alt="验证码">
+						<img bind-attr="src=src" alt="验证码">
 					</span>
 				</p>
 				<a href="#nolink" class="btn-login">登录</a>

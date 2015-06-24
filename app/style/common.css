@@ -320,3 +320,60 @@ body{background: #eee;}
 	-ms-transform: rotate(90deg);
 	transform: rotate(90deg);
 }
+
+
+
+/* -- 错误提示 -- */
+.layout-err-tips{
+	text-align: center;
+	height:2rem;
+	line-height: 2rem;
+	background-color:rgba(234, 49, 49, .7);
+	color:#fff;
+	position: absolute;
+	/*top:0;*/
+	left:0;
+	width:100%;
+	z-index: 10;
+}
+@-webkit-keyframes fadeout{
+	0%{
+		opacity: 1;
+	}
+	100%{  
+		opacity: 0;
+	}
+}
+@-ms-keyframes fadeout{
+	0%{
+		opacity: 1;
+	}
+	100%{  
+		opacity: 0;
+	}
+}
+@-moz-keyframes fadeout{
+	0%{
+		opacity: 1;
+	}
+
+	100%{  
+		opacity: 0;
+	}
+}
+@keyframes fadeout{
+	0%{
+		opacity: 1;
+	}
+
+	100%{  
+		opacity: 0;
+	}
+}
+.fade-out{
+	-webkit-animation:fadeout 3s ease-out 1;
+	-ms-animation:fadeout 3s ease-out 1;
+	-moz-animation:fadeout 3s ease-out 1;
+	animation:fadeout 3s ease-out 1;
+	opacity: 0;
+}
