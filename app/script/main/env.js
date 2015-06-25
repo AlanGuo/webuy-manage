@@ -2,9 +2,10 @@
 
 define(function(require, exports,module) {
 	var util = require('util');
+	var config = require('config');
 	var env = {},ua = navigator.userAgent;
 
-	env.defaultTitle = 'spaseed';
+	env.defaultTitle = config.title;
 	env.cdn = window.cdn;
 	env.isIOS = util.isIOS();
 	env.isAndroid = util.isAndroid();

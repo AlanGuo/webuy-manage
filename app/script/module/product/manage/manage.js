@@ -19,7 +19,7 @@ define(function (require, exports, module) {
 
         render: function () {
             pageManager.html({
-                container:template('index')()
+                container:template('product/manage')()
             });
         },
 

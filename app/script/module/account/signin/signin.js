@@ -36,6 +36,41 @@ define(function (require, exports, module) {
         events:{
             'click':{
                 'signin':function(){
+                    var self = this;
+                    var postedData = this.data.postedData;
+                    for(var p in postedData){
+                        postedData[p] = postedData[p].trim();
+                    }
+
+                    if(!formatchecker.isEmail(postedData.login) && !formatchecker.isMobile(postedData.login)){
+                        dialog.showError('请填写正确的email或者手机号码');
+                        return;
+                    }                 
+                    if(!formatchecker.isPassword(postedData.userpassword)){
+                        dialog.showError('请填写正确的密码');
+                        return;
+                    }
+                    if(!formatchecker.notEmpty(postedData.vercode)){
+                        dialog.showError('请填写验证码');
+                        return;
+                    }
+
+                    //注册账户
+                    request.signin(this.data.postedData,function(){
+                        location.href = '/';
+                    },function(msg){
+                        self.data.src = vercode + '?random=' + Math.random();
+                        dialog.showError(msg);
+                    });
+                },
+                'changevercode':function(){
+                    this.data.src = vercode + '?random=' + Math.random();
+                },
+                'forgetpassword':function(){
+
+                },
+                'resetpassword':function(){
+
                 }
             }
         },

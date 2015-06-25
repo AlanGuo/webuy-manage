@@ -3,6 +3,7 @@ var crypto = require('crypto');
 var md5 = crypto.createHash('md5');
 var mysql = require('mysql');
 var qs = require('querystring');
+var shortid = require('shortid');
 
 var mysqlConnection = {
   host     : '58.96.185.53',
@@ -31,12 +32,21 @@ var vercode = '';
 var admin = {
 	///cgi-bin/admin/signin
 	signin:function(pathname, request, response, config){
+		
 		if(/post/i.test(request.method)){
 			var postData = qs.parse(request.body);
-			connection.connect();
-			var searchUser = 'select user_email,user_password from webuy.user where user_email="'+postData.useremail+'"';
+
+			connection.connect(function(err) {
+			  if (err) {
+			    console.error('error connecting: ' + err.stack);
+			    return;
+			  }
+
+			  console.log('connected as id ' + connection.threadId);
+			});
+
+			var searchUser = 'select user_email,user_mobile,user_password from webuy.user where user_type=2 and user_email="'+postData.login+'" or user_mobile="'+postData.login+'"';
 			connection.query(searchUser,function(err, rows){
-				connection.end();
 				if(!err){
 					if(rows.length){
 						if(rows[0].user_password === md5.update(postData.userpassword).digest('hex')){
@@ -50,7 +60,7 @@ var admin = {
 							jsonRespond(response,{
 								code:111,
 								data:{},
-								msg:'邮箱或密码错误'
+								msg:'登陆名或密码错误'
 							});
 						}
 					}
@@ -58,7 +68,7 @@ var admin = {
 						jsonRespond(response,{
 							code:112,
 							data:{},
-							msg:'邮箱或密码错误'
+							msg:'登陆名或密码错误'
 						});
 					}
 				}
@@ -72,6 +82,8 @@ var admin = {
 					});
 				}
 			});
+
+			connection.end();
 		}
 		else{
 			jsonRespond(response,{
@@ -93,7 +105,6 @@ var admin = {
 					var searchUser = 'select user_mobile,user_email from webuy.user where user_mobile="'+postData.user_mobile+'" or user_email="'+postData.useremail+'"';
 					connection.query(searchUser,function(err, rows){
 						if(!err){
-							connection.end();
 							if(rows.length){
 								if(rows.filter(function(item){
 									if(item.user_email === postData.useremail){
@@ -121,7 +132,7 @@ var admin = {
 							else{
 								var sql = 'insert into webuy.user (user_name, user_avatar, user_password, user_type, user_mobile, user_createtime, user_logintime, user_email, user_authority)'
 										+ ' values ("'
-										+'admin'+'",'
+										+'admin_'+shortid.generate()+'",'
 										+null+',"'
 										+md5.update(postData.userpassword).digest('hex')+'",'
 										+2+','
@@ -133,7 +144,6 @@ var admin = {
 
 								connection.query(sql, 
 									function(err, rows) {
-										connection.end();
 										if(!err){
 											jsonRespond(response,{
 												code:0,
@@ -154,7 +164,6 @@ var admin = {
 								});
 							}
 						}else{
-							connection.end();
 							console.log(err);
 							jsonRespond(response,{
 								code:500,
@@ -165,6 +174,7 @@ var admin = {
 							});
 						}
 				});
+				connection.end();
 			}else{
 				jsonRespond(response,{
 					code:401,
