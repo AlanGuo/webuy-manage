@@ -9,7 +9,7 @@ define(function (require, exports, module) {
     var binder = require('binder');
     var request = require('request');
     var formatchecker = require('formatcheck');
-    var vercode = '/cgi-bin/secure/verifycode';
+    var vercode = '/cgi-bin/security/verifycode';
 
     var signuppage = {
 

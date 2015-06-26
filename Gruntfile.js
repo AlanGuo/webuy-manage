@@ -40,7 +40,8 @@ module.exports = function (grunt) {
       //pri越大，加载越靠前
       localstoragePriority = [
         {key:'sea',pri:2,ext:'js'},
-        {key:'app.combo',pri:1,ext:'js'}
+        {key:'app.combo',pri:1,ext:'js'},
+        {key:'main',pri:1,ext:'css'}
       ];
 
   var localStorageRewriteScript=function(contents,filePath,prefix){
@@ -188,7 +189,10 @@ module.exports = function (grunt) {
     nodeServer:{
       cgi:{
         path:'.',
-        port:9100
+        port:9100,
+        files:[{
+          src :'backend/*.js'
+        }]
       }
     },
     
@@ -460,7 +464,18 @@ module.exports = function (grunt) {
       },
       view:{
         options: {
-          base: ''
+          base: local
+        },
+        files: [{
+          expand: true,
+          cwd: '<%= yeoman.app %>/view',
+          src: '**/*.{css,html}',
+          dest: 'tmp/view'
+        }]
+      },
+      viewdist:{
+        options: {
+          base: cdn
         },
         files: [{
           expand: true,
@@ -471,7 +486,7 @@ module.exports = function (grunt) {
       },
       dist: {
         options: {
-          base: ''
+          base: cdn
         },
         files: [{
           expand: true,
@@ -495,12 +510,7 @@ module.exports = function (grunt) {
             '*.{ico,png,txt}',
             '.htaccess',
             '*.html',
-            
-            '../spm_modules/seajs/2.3.0/dist/sea.js',
-            
             '*.js',
-            
-            
             //'*.js', //for combo
             'image/**/*.{webp}'
           ]
@@ -510,7 +520,11 @@ module.exports = function (grunt) {
           cwd: 'tmp/image',
           dest: '<%= yeoman.dist %>/image',
           src: ['generated/*']
-        //seajs
+        }, {
+          expand: true,
+          cwd: '.',
+          dest: '<%= yeoman.dist %>',
+          src: ['web.json','backend/*.js']
         }, {
           expand: true,
           cwd: 'app/font',
@@ -620,7 +634,7 @@ module.exports = function (grunt) {
           files: [{
               expand: true,
               cwd: './',
-              src: ['app/script/entry.js','app/script/home.js','app/script/about.js','app/script/contact.js']
+              src: ['app/script/entry.js','app/script/module/**/*.js']
           }]
         }
       }
@@ -672,7 +686,7 @@ module.exports = function (grunt) {
     'jshint',
     'concat',
     
-    'cdnify:view',
+    'cdnify:viewdist',
     'tmod',
     
     
@@ -696,7 +710,7 @@ module.exports = function (grunt) {
     'jshint',
     'concat',
     
-    'cdnify:view',
+    'cdnify:viewdist',
     'tmod',
     
     
