@@ -30,7 +30,7 @@
     "grunt-ftpush": "^0.3.3",
     "grunt-livereload": "^0.1.3",
     "grunt-newer": "^1.1.1",
-    "grunt-node-server": "^0.2.10",
+    "grunt-node-server": "^0.2.11",
     "grunt-qc-cdnify": "^0.1.1",
     "grunt-rewrite": "^1.0.1",
     "grunt-seajs-combo": "^1.0.11",
