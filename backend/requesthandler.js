@@ -1,6 +1,5 @@
 var ccap = require('ccap');
 var crypto = require('crypto');
-var md5 = crypto.createHash('md5');
 var mysql = require('mysql');
 var qs = require('querystring');
 var shortid = require('shortid');
@@ -10,7 +9,9 @@ var mysqlConnection = {
   user     : 'root',
   password : 'Siemenlon123'
 };
-var connection = mysql.createConnection(mysqlConnection);
+var connection = null;
+
+connection = mysql.createConnection(mysqlConnection);
 
 var jsonRespond = function(response, json, options){
 	options = options || {};
@@ -36,20 +37,21 @@ var admin = {
 		if(/post/i.test(request.method)){
 			var postData = qs.parse(request.body);
 
+			
 			connection.connect(function(err) {
 			  if (err) {
 			    console.error('error connecting: ' + err.stack);
 			    return;
 			  }
-
 			  console.log('connected as id ' + connection.threadId);
 			});
+
 
 			var searchUser = 'select user_email,user_mobile,user_password from webuy.user where user_type=2 and user_email="'+postData.login+'" or user_mobile="'+postData.login+'"';
 			connection.query(searchUser,function(err, rows){
 				if(!err){
 					if(rows.length){
-						if(rows[0].user_password === md5.update(postData.userpassword).digest('hex')){
+						if(rows[0].user_password === crypto.createHash('md5').update(postData.userpassword).digest('hex')){
 							jsonRespond(response,{
 								code:0,
 								data:{},
@@ -73,6 +75,7 @@ var admin = {
 					}
 				}
 				else{
+					console.log(err);
 					jsonRespond(response,{
 						code:500,
 						data:{},
@@ -101,6 +104,7 @@ var admin = {
 			if(/post/i.test(request.method)){
 				var postData = qs.parse(request.body);
 				if(vercode === postData.vercode){
+					connection = mysql.createConnection(mysqlConnection);
 					connection.connect();
 					var searchUser = 'select user_mobile,user_email from webuy.user where user_mobile="'+postData.user_mobile+'" or user_email="'+postData.useremail+'"';
 					connection.query(searchUser,function(err, rows){
@@ -134,7 +138,7 @@ var admin = {
 										+ ' values ("'
 										+'admin_'+shortid.generate()+'",'
 										+null+',"'
-										+md5.update(postData.userpassword).digest('hex')+'",'
+										+crypto.createHash('md5').update(postData.userpassword).digest('hex')+'",'
 										+2+','
 										+postData.usermobile+',"'
 										+new Date()+'",'
