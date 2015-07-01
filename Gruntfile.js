@@ -453,7 +453,13 @@ module.exports = function (grunt) {
     cdnify: {
       serve:{
         options: {
-          base: local
+          rewriter: function (url) {
+            if (url.indexOf('font')>-1 || url.indexOf('http://')>-1 || url.indexOf('https://')>-1){
+              return url;
+            }else{
+              return local+url;
+            }
+          }
         },
         files: [{
           expand: true,
@@ -464,7 +470,13 @@ module.exports = function (grunt) {
       },
       view:{
         options: {
-          base: local
+          rewriter: function (url) {
+            if (url.indexOf('font')>-1 || url.indexOf('http://')>-1 || url.indexOf('https://')>-1){
+              return url;
+            }else{
+              return local+url;
+            }
+          }
         },
         files: [{
           expand: true,
@@ -475,7 +487,13 @@ module.exports = function (grunt) {
       },
       viewdist:{
         options: {
-          base: cdn
+          rewriter: function (url) {
+            if (url.indexOf('font')>-1 || url.indexOf('http://')>-1 || url.indexOf('https://')>-1){
+              return url;
+            }else{
+              return cdn+url;
+            }
+          }
         },
         files: [{
           expand: true,
@@ -486,7 +504,13 @@ module.exports = function (grunt) {
       },
       dist: {
         options: {
-          base: cdn
+          rewriter: function (url) {
+            if (url.indexOf('font')>-1 || url.indexOf('http://')>-1 || url.indexOf('https://')>-1){
+              return url;
+            }else{
+              return cdn+url;
+            }
+          }
         },
         files: [{
           expand: true,

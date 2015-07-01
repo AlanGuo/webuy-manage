@@ -6,7 +6,7 @@
   <meta name="description" content="webapp">
   <meta name="author" content="alan">
   
-  <title>webuy</title>
+  <title>WeBuy</title>
 
   <!--{{localstorage-remove-start}}-->
   <!--for main style-->
@@ -21,12 +21,24 @@
   <!--{{localstorage-remove-end}}-->
 </head>
 
-
+<style type="text/css">
+    /*fonts icos*/
+    @font-face {
+      font-family: 'icomoon';
+      src: url('/font/icomoon.eot?20150630');
+        src: url('/font/icomoon.eot?20150630#iefix') format('embedded-opentype'),
+        url('/font/icomoon.woff?20150630') format('woff'),
+        url('/font/icomoon.ttf?20150630') format('truetype'),
+        url('/font/icomoon.svg?20150630#iconfont') format('svg');
+        font-weight: normal;
+        font-style: normal;
+    }
+  </style>
 
 <body>
 
     <!-- Add your site or application content here -->
-    <div class="wrapper-all" id="wrapper-all">
+    <div class="wrapper" id="wrapper-all">
       <!--loading start-->
       <style type="text/css">
         /* --------------- loading --------------- */
@@ -150,7 +162,66 @@
       </div>
 
       <div class="body">
-        <p  id="body-container">
+        <!-- 右边栏 start -->
+        <div class="side-bar">
+
+          <div class="top-bar">
+            <span class="icon-logo"></span>
+            商品后台管理
+          </div>
+        
+          <!-- menu start -->
+          <div class="side-nav">
+            <ul class="list-group">
+              <li class="sub-item">
+                <a class="mn" href="javascript:;">
+                  <i class="ico icon-products"></i>
+                  <span class="menu-title">商品管理</span>
+                </a>
+              </li>
+              <li class="sub-item">
+                <a class="mn" href="javascript:;">
+                  <i class="ico icon-article"></i>
+                  <span class="menu-title">文章管理</span>
+                </a>
+              </li>
+              <li class="sub-item">
+                <a class="mn" href="javascript:;">
+                  <i class="ico icon-orders"></i>
+                  <span class="menu-title">订单管理</span>
+                </a>
+              </li>
+              <li class="sub-item">
+                <a class="mn" href="javascript:;">
+                  <i class="ico icon-classify"></i>
+                  <span class="menu-title">分类管理</span>
+                </a>
+              </li>
+              <li class="sub-item">
+                <a class="mn" href="javascript:;">
+                  <i class="ico icon-stat"></i>
+                  <span class="menu-title">统计管理</span>
+                  <i class="icon-right"></i>
+                </a>
+                <ul class="submenu">
+                  <li>
+                    <a href="javascript:;">商品交易统计</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="sub-item">
+                <a class="mn" href="javascript:;">
+                  <i class="ico icon-vip"></i>
+                  <span class="menu-title">会员管理</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <!-- menu end -->
+        
+        </div>
+        <!-- 右边栏 end -->
+        <p id="body-container">
         </p>
       </div>
 

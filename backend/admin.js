@@ -189,17 +189,18 @@ var admin = {
 									status:500
 								});
 							}
-					});
-				}else{
-					util.jsonRespond(response,{
-						code:401,
-						data:{},
-						msg:'验证码错误'
-					},{
-						status:401
-					});
-				}
-			});
+						});
+					}
+				});
+			}else{
+				util.jsonRespond(response,{
+					code:401,
+					data:{},
+					msg:'验证码错误'
+				},{
+					status:401
+				});
+			}
 		}else{
 			util.jsonRespond(response,{
 				code:405,
@@ -210,6 +211,6 @@ var admin = {
 			});
 		}
 	}
-};
+}
 
 module.exports = admin;
