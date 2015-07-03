@@ -21,11 +21,7 @@
 define(function(require, exports,module) {
 
 	var $ = require('$');
-	
-	var pageManager = require('pagemanager');
-    var evt = require('event');
     var template = require('template');
-    var env = require('env');
 
     var dialog = {status:0,height:0};
 
@@ -207,16 +203,11 @@ define(function(require, exports,module) {
 		},ms||2000);
 	};
 	dialog.showMask = function(){
-		pageManager.mask.css('height',env.resolution.y).show();
+		//pageManager.mask.css('height',env.resolution.y).show();
 	};
 	dialog.hideMask = function(){
-		pageManager.mask.hide();
+		//pageManager.mask.hide();
 	};
-	evt.bindCommonEvent('click',{
-		'dialog-hide':function(){
-			dialog.hide();
-		}
-	});
 
     module.exports = dialog;
 });

@@ -133,7 +133,7 @@ body{background: #eee;}
 }
 .footer{
 	height:50px;
-	padding-left:220px;
+	text-align: center;
 	color:#c6c6c6;
 	line-height: 50px;
 	position: absolute;

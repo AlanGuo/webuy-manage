@@ -2,6 +2,7 @@
 
 
 define(function(require, exports, module) {
+
 	var formatchecker = {
 		isMobile:function(data){
 			if(/^1\d{10}$/.test(data)){
@@ -39,5 +40,6 @@ define(function(require, exports, module) {
 	    	}
 	    }
 	};
+
 	module.exports = formatchecker;
  });

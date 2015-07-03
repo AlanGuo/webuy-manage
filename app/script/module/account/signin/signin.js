@@ -1,20 +1,23 @@
 'use strict';
 
 define(function (require, exports, module) {
-    var pageManager = require('pagemanager');
-    //var stats = require('stats');
-    var template = require('apptemplate');
-    var env = require('env');
-    var dialog = require('dialog');
-    var binder = require('binder');
-    var request = require('request');
-    var formatchecker = require('formatcheck');
-    var vercode = '/cgi-bin/security/verifycode';
+    var $ = require('$'),
+        View = require('View'),
+        template = require('template'),
+        dialog = require('dialog'),
+        binder = require('binder'),
+        request = require('request'),
+        formatchecker = require('formatcheck'),
+        vercode = '/cgi-bin/security/verifycode';
 
-    var signinpage = {
+    var signinpageView = View.extend({
 
-        title: env.defaultTitle,
+        $elem:$('#wrapper-all'),
 
+        ctor:function(data){
+            data.className = 'login-wrapper';
+            this.$super(data);
+        },
         data:{
             postedData:{
                 login:'',
@@ -25,12 +28,8 @@ define(function (require, exports, module) {
         },
 
         render: function () {
-            pageManager.html({
-                container:template('account/signin')(),
-                className:'login-wrapper'
-            });
-
-            binder.bind(pageManager.container[0],this.data);
+            this.$elem.html(template('account/signin'));
+            binder.bind(this.$elem,this.data);
         },
 
         events:{
@@ -77,7 +76,7 @@ define(function (require, exports, module) {
 
         destroy: function () {
         }
-    };
+    });
         
-    module.exports = signinpage;
+    module.exports = signinpageView;
 });

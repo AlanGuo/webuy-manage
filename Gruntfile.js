@@ -621,36 +621,31 @@ module.exports = function (grunt) {
           destPath:'/',
           
           alias: {
-              //spaseed
-              '$': 'spm_modules/spaseed/1.1.17/lib/zepto',                  
-              'util': 'spm_modules/spaseed/1.1.17/lib/util',
-              'net': 'spm_modules/spaseed/1.1.17/lib/net',
-              'cookie': 'spm_modules/spaseed/1.1.17/lib/cookie',
-              'event': 'spm_modules/spaseed/1.1.17/lib/event',
-              'querystring':'spm_modules/spaseed/1.1.17/lib/querystring',
-              'datamanager': 'spm_modules/spaseed/1.1.17/lib/datamanager',
-              'binder':'spm_modules/spaseed/1.1.17/lib/binder',
-              'formatcheck':'spm_modules/spaseed/1.1.17/lib/formatcheck',
-              'model':'spm_modules/spaseed/1.1.17/lib/model',
-              'stats':'spm_modules/spaseed/1.1.17/lib/stats',
-              'requestconstructor':'spm_modules/spaseed/1.1.17/lib/requestconstructor',
-              'requestmanager':'spm_modules/spaseed/1.1.17/lib/requestmanager',
-              'asyncrequest':'spm_modules/spaseed/1.1.17/lib/asyncrequest',
-              'dialog':'spm_modules/spaseed/1.1.17/lib/dialog',
-              
-              'router': 'spm_modules/spaseed/1.1.17/main/router',
-              'entry': 'spm_modules/spaseed/1.1.17/main/entry',
+            'mp': 'spm_modules/spaseed/1.1.18/main/mp',
+            '$': 'spm_modules/spaseed/1.1.18/lib/dom',
+            'App': 'spm_modules/spaseed/1.1.18/main/App',
+            'Node': 'spm_modules/spaseed/1.1.18/main/Node',
+            'View': 'spm_modules/spaseed/1.1.18/main/View',
+            'TopBottomView': 'spm_modules/spaseed/1.1.18/main/TopBottomView',
+            'Router': 'spm_modules/spaseed/1.1.18/main/H5Router',
 
-              //external
-              'config': 'app/script/config',
-              
-              //带pageswitcher的pagemanager
-              'pagemanager': 'spm_modules/spaseed/1.1.17/main/pagemanagerwithtopbottom',
-              'pageswitcher': 'spm_modules/spaseed/1.1.17/lib/pageswitcher',
-              'template': 'app/script/main/template',
-              'apptemplate': 'tmp/view/compiled/view',
-              'request':'app/script/model/request',
-              'env': 'app/script/main/env'
+            'Net': 'spm_modules/spaseed/1.1.18/lib/Net',
+            'Event': 'spm_modules/spaseed/1.1.18/lib/Event',
+            
+            'cookie': 'spm_modules/spaseed/1.1.18/lib/cookie',
+            'querystring':'spm_modules/spaseed/1.1.18/lib/querystring',
+            'datamanager': 'spm_modules/spaseed/1.1.18/lib/datamanager',
+            'binder':'spm_modules/spaseed/1.1.18/lib/binder',
+            'formatcheck':'spm_modules/spaseed/1.1.18/lib/formatcheck',
+            'stats':'spm_modules/spaseed/1.1.18/lib/stats',
+            'asyncrequest':'spm_modules/spaseed/1.1.18/lib/asyncrequest',
+
+            //external
+            'config': 'spm_modules/spaseed/1.1.18/config',
+            
+            'template': 'spm_modules/spaseed/1.1.18/lib/template',
+            'apptemplate': 'tmp/view/compiled/view',
+            'env': 'app/script/main/env'
           },
           
           dest:'dist/script/app.combo.js'

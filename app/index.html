@@ -38,7 +38,7 @@
 <body>
 
     <!-- Add your site or application content here -->
-    <div class="wrapper" id="wrapper-all">
+    <div>
       <!--loading start-->
       <style type="text/css">
         /* --------------- loading --------------- */
@@ -157,72 +157,8 @@
           <span class="load-4"></span>
         </p>
       </div>
-      <!--loading end-->
-      <div class="header">
-      </div>
 
-      <div class="body">
-        <!-- 右边栏 start -->
-        <div class="side-bar">
-
-          <div class="top-bar">
-            <span class="icon-logo"></span>
-            商品后台管理
-          </div>
-        
-          <!-- menu start -->
-          <div class="side-nav">
-            <ul class="list-group">
-              <li class="sub-item">
-                <a class="mn" href="javascript:;">
-                  <i class="ico icon-products"></i>
-                  <span class="menu-title">商品管理</span>
-                </a>
-              </li>
-              <li class="sub-item">
-                <a class="mn" href="javascript:;">
-                  <i class="ico icon-article"></i>
-                  <span class="menu-title">文章管理</span>
-                </a>
-              </li>
-              <li class="sub-item">
-                <a class="mn" href="javascript:;">
-                  <i class="ico icon-orders"></i>
-                  <span class="menu-title">订单管理</span>
-                </a>
-              </li>
-              <li class="sub-item">
-                <a class="mn" href="javascript:;">
-                  <i class="ico icon-classify"></i>
-                  <span class="menu-title">分类管理</span>
-                </a>
-              </li>
-              <li class="sub-item">
-                <a class="mn" href="javascript:;">
-                  <i class="ico icon-stat"></i>
-                  <span class="menu-title">统计管理</span>
-                  <i class="icon-right"></i>
-                </a>
-                <ul class="submenu">
-                  <li>
-                    <a href="javascript:;">商品交易统计</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="sub-item">
-                <a class="mn" href="javascript:;">
-                  <i class="ico icon-vip"></i>
-                  <span class="menu-title">会员管理</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-          <!-- menu end -->
-        
-        </div>
-        <!-- 右边栏 end -->
-        <p id="body-container">
-        </p>
+      <div id="wrapper-all">
       </div>
 
       <div class="footer">
@@ -249,49 +185,43 @@
     <script type="text/javascript">
       /*{{localstorage-onload-start}}*/
       if(window.seajs){
-        
           seajs.config({
             base:'/',
             alias: {
                 //spaseed
-                '$': 'spm_modules/spaseed/1.1.17/lib/zepto',                  
-                'util': 'spm_modules/spaseed/1.1.17/lib/util',
-                'net': 'spm_modules/spaseed/1.1.17/lib/net',
-                'cookie': 'spm_modules/spaseed/1.1.17/lib/cookie',
-                'event': 'spm_modules/spaseed/1.1.17/lib/event',
-                'querystring':'spm_modules/spaseed/1.1.17/lib/querystring',
-                'datamanager': 'spm_modules/spaseed/1.1.17/lib/datamanager',
-                'binder':'spm_modules/spaseed/1.1.17/lib/binder',
-                'formatcheck':'spm_modules/spaseed/1.1.17/lib/formatcheck',
-                'model':'spm_modules/spaseed/1.1.17/lib/model',
-                'stats':'spm_modules/spaseed/1.1.17/lib/stats',
-                'requestconstructor':'spm_modules/spaseed/1.1.17/lib/requestconstructor',
-                'requestmanager':'spm_modules/spaseed/1.1.17/lib/requestmanager',
-                'asyncrequest':'spm_modules/spaseed/1.1.17/lib/asyncrequest',
-                'dialog':'spm_modules/spaseed/1.1.17/lib/dialog',
+                'mp': 'spm_modules/spaseed/1.1.18/main/mp',
+                '$': 'spm_modules/spaseed/1.1.18/lib/dom',
+                'App': 'spm_modules/spaseed/1.1.18/main/App',
+                'Node': 'spm_modules/spaseed/1.1.18/main/Node',
+                'View': 'spm_modules/spaseed/1.1.18/main/View',
+                'SideBarView': 'spm_modules/spaseed/1.1.18/main/SideBarView',
+                'Router': 'spm_modules/spaseed/1.1.18/main/H5Router',
+
+                'Net': 'spm_modules/spaseed/1.1.18/lib/Net',
+                'Event': 'spm_modules/spaseed/1.1.18/lib/Event',
                 
-                'router': 'spm_modules/spaseed/1.1.17/main/router',
-                'entry': 'spm_modules/spaseed/1.1.17/main/entry',
+                'cookie': 'spm_modules/spaseed/1.1.18/lib/cookie',
+                'querystring':'spm_modules/spaseed/1.1.18/lib/querystring',
+                'datamanager': 'spm_modules/spaseed/1.1.18/lib/datamanager',
+                'binder':'spm_modules/spaseed/1.1.18/lib/binder',
+                'formatcheck':'spm_modules/spaseed/1.1.18/lib/formatcheck',
+                'stats':'spm_modules/spaseed/1.1.18/lib/stats',
+                'asyncrequest':'spm_modules/spaseed/1.1.18/lib/asyncrequest',
+                'dialog':'spm_modules/spaseed/1.1.18/lib/dialog',
 
                 //external
-                'config': 'app/script/config',
+                'config': 'spm_modules/spaseed/1.1.18/config',
                 
-                //带pageswitcher的pagemanager
-                'pagemanager': 'spm_modules/spaseed/1.1.17/main/pagemanagerwithtopbottom',
-                'pageswitcher': 'spm_modules/spaseed/1.1.17/lib/pageswitcher',
-                'template': 'app/script/main/template',
+                'template': 'spm_modules/spaseed/1.1.18/lib/template',
                 'apptemplate': 'tmp/view/compiled/view',
+                'env': 'app/script/main/env',
                 'request':'app/script/model/request',
-                'env': 'app/script/main/env'
             }
           });
-          seajs.use('app/script/entry.js',function(entry){
-            document.getElementById('page-loader').parentNode.removeChild(document.getElementById('page-loader'));
-            if(entry){
-              entry.startup();
-            }
-          });
-        
+          seajs.use('app/script/startup.js',function(startup){
+          document.getElementById('page-loader').parentNode.removeChild(document.getElementById('page-loader'));
+            startup();
+        });
       }
       /*{{localstorage-onload-end}}*/
       /*{{localstorage}}*/
