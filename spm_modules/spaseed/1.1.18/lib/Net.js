@@ -1,14 +1,6 @@
 define(function (require, exports, module) {
     var mp = require('mp'),
         $ = require('$');
-    
-    var objectToParams = function (obj, decodeUri) {
-        var param = $.param(obj);
-        if (decodeUri) {
-            param = decodeURIComponent(param);
-        }
-        return param;
-    };
 
     var console = window.console;
 
@@ -18,53 +10,12 @@ define(function (require, exports, module) {
      * @static
      */
     var Net = mp.Class.extend({
-
+        $app:null,
         ctor:function(app){
             this.$app = app;
         },
         
         _progressBar:[],
-        /**
-         * 发起请求
-         * @method send
-         * @param  {Object} cgiConfig 配置
-         * @param  {Object} opt       选参
-         */
-        send: function (cgiConfig, opt) {
-            var _self = this,
-                _cgiConfig = cgiConfig,
-                _data = opt.data || {},
-                _url = "",
-                _cb = null;
-
-            if (!_cgiConfig) {
-                _cgiConfig = {
-                    url: opt.url,
-                    method: opt.method
-                };
-            }
-
-            if (_cgiConfig) {
-
-                // 成功回调
-                _cb = function (ret) {
-                    opt.cb && opt.cb(ret);
-                };
-
-                var urlParams = {
-                    t: new Date().getTime()
-                };
-
-                _url = this._addParam(_cgiConfig.url, urlParams);
-
-                if (_cgiConfig.method && _cgiConfig.method.toLowerCase() === "post") {
-                    return this.post(_url, _data, _cb);
-                } else {
-                    return this.get(_url, _data, _cb);
-                }
-
-            }
-        },
 
         /**
          * GET请求
@@ -146,28 +97,28 @@ define(function (require, exports, module) {
             this.isBusy = true;
             (function(pbar){
                 returnVal = $.ajax({
-                    type: method,
+                    method: method,
                     url: url,
                     data: data,
-                    success: function (data) {
+                    success: function (ret) {
                         self.isBusy = false;
                         self._hideProgress(pbar);
-                        cb(data, {starttime:starttime});
+                        cb(ret, {starttime:starttime});
                     },
                     error: function (jqXHR) {
                         self.isBusy = false;
                         self._hideProgress(pbar);
-                        var data = {};
+                        var ret = {};
                         try{
-                            data = JSON.parse(jqXHR.responseText);
+                            ret = JSON.parse(jqXHR.responseText);
                         }
                         catch(e){
                             console.error('jqXHR.responseText parse error');
-                            data.code = jqXHR.status;
-                            data.msg = jqXHR.statusText;
-                            data.data = {};
+                            ret.code = jqXHR.status;
+                            ret.msg = jqXHR.statusText;
+                            ret.data = {};
                         }
-                        cb(data, {starttime:starttime});
+                        cb(ret, {starttime:starttime});
                     }
                 });
                 if(pbar){

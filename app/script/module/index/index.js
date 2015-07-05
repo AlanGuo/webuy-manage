@@ -4,18 +4,15 @@ define(function (require, exports, module) {
     var template = require('template'),
         SideBarView = require('SideBarView');
 
-    var productmanagepageView = SideBarView.extend({
-
-        data:{
-        },
+    var indexPageView = SideBarView.extend({
 
         render: function () {
             this.renderContent({
-                sidebar:template('sidebar',{}),
-                container:template('index',{})
+                sidebar:template('sidebar'),
+                container:template('index')
             });
         }
     });
         
-    module.exports = productmanagepageView;
+    module.exports = indexPageView;
 });

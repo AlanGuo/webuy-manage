@@ -1,36 +1,21 @@
 'use strict';
 
 define(function (require, exports, module) {
-    var pageManager = require('pagemanager');
-    //var stats = require('stats');
-    var template = require('apptemplate');
-    var env = require('env');
-    //var dialog = require('dialog');
-    //var binder = require('binder');
-    //var request = require('request');
-    //var formatchecker = require('formatcheck');
+    var template = require('template'),
+        SideBarView = require('SideBarView');
 
-    var productmanagepage = {
-
-        title: env.defaultTitle,
+    var productManagepageView = SideBarView.extend({
 
         data:{
         },
 
         render: function () {
-            pageManager.html({
-                container:template('product/manage')()
+            this.renderContent({
+                sidebar:template('sidebar',{}),
+                container:template('product/manage',{})
             });
-        },
-
-        events:{
-            'click':{
-            }
-        },
-
-        destroy: function () {
         }
-    };
+    });
         
-    module.exports = productmanagepage;
+    module.exports = productManagepageView;
 });

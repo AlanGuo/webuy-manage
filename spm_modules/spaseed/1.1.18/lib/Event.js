@@ -25,7 +25,7 @@ define(function(require, exports, module) {
 		if(elem.length){
 			elem = elem[0];
 		}
-		elem.addEventListener(event, fn, true);
+		elem.addEventListener(event, fn);
 	};
 
 	//移除事件监听
@@ -39,6 +39,8 @@ define(function(require, exports, module) {
 	//获取元素中包含事件的第一个子元素
 	var getWantTarget = function(evt, topElem, type, judgeFn){
 		
+		if(topElem.length){topElem = topElem[0]}
+
 		judgeFn = judgeFn || this.judgeFn || _defalutJudgeFn;
 		
 		var _targetE = evt.srcElement || evt.target;
@@ -52,22 +54,19 @@ define(function(require, exports, module) {
 			if( topElem == _targetE ){
 				break;
 			}
+
+			_targetE= _targetE.parentNode;
 			
-			if(_targetE != document.body){
-				_targetE = _targetE.parentNode;
-			}
-			else{
-				return null;
-			}
 		}
 		return null;
 	};
 
 	var Event = mp.Class.extend({
-		ctor:function(){
+		ctor:function(app){
+			this.$app = app;
         },
         /**
-		 * 通用的绑定事件处理
+		 * 通用的绑定事件处理，每个view绑定一个，互相独立不干扰
 		 * @method bindEvent
 		 * @param {Object} inst 对象
 		 * @param {Element} topElem 要绑定事件的元素
@@ -166,8 +165,8 @@ define(function(require, exports, module) {
 		 * @param {dealFn} 事件处理的函数
 		 */
 		unbindEvent:function(topElem, type, handler){
-			if(hander){
-				if(type === 'click' && util.isMobile()){
+			if(handler){
+				if(type === 'click' && env.isMobile){
 					//解绑touch事件
 					for(p in handler){
 						removeEvent(topElem, p, handler[p])
@@ -179,12 +178,6 @@ define(function(require, exports, module) {
 			}
 		},
 
-		/**
-		 * 为body添加事件代理
-		 * @method bindBodyEvent
-		 * @param {string} eventName 事件类型
-		 * @param {function} handler 事件处理的函数
-		 */
 		on:function(inst, eventName, handlerName, handler){
 			_handlers[inst.$id] = _handlers[inst.$id] || {};
 			_handlers[inst.$id].inst = inst;
@@ -193,7 +186,7 @@ define(function(require, exports, module) {
 		},
 
 		off:function(inst, eventName, handlerName){
-			if(!handler){
+			if(!handlerName){
 				if(!eventName){
 					_handlers[inst.$id] = {};
 				}

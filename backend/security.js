@@ -24,8 +24,6 @@ var security = {
 		//ary[0] is captcha's text,ary[1] is captcha picture buffer.
 		vercode = ary[0];
 
-		console.log(ary[0]);
-
 		var buffer = ary[1];
 		response.writeHead('200',{
 			'Content-Type':'image/jpeg'

@@ -1,9 +1,10 @@
 'use strict';
 
 define(function(require, exports, module) {
-	var App = require('App');
-	var config = require('config');
-	var $ = require('$');
+	var App = require('App'),
+		config = require('config'),
+		$ = require('$');
+
 	//应用入口函数
     var startup = function(container){
 		container = container || $('#wrapper-all');
@@ -17,6 +18,7 @@ define(function(require, exports, module) {
 				}
 			}
 		}));
+
 		app.startup();
 	};
 

@@ -3,8 +3,8 @@
 define(function (require, exports, module) {
     var $ = require('$'),
         View = require('View'),
+        ErrorTips = require('ErrorTips'),
         template = require('template'),
-        dialog = require('dialog'),
         binder = require('binder'),
         request = require('request'),
         formatchecker = require('formatcheck'),
@@ -29,6 +29,7 @@ define(function (require, exports, module) {
 
         render: function () {
             this.$elem.html(template('account/signin'));
+            this.$errorTips = ErrorTips.create({$elem:$('#errortips')});
             binder.bind(this.$elem,this.data);
         },
 
@@ -42,24 +43,29 @@ define(function (require, exports, module) {
                     }
 
                     if(!formatchecker.isEmail(postedData.login) && !formatchecker.isMobile(postedData.login)){
-                        dialog.showError('请填写正确的email或者手机号码');
+                        self.$errorTips.show('请填写正确的email或者手机号码');
                         return;
                     }                 
                     if(!formatchecker.isPassword(postedData.userpassword)){
-                        dialog.showError('请填写正确的密码');
+                        self.$errorTips.show('请填写正确的密码');
                         return;
                     }
                     if(!formatchecker.notEmpty(postedData.vercode)){
-                        dialog.showError('请填写验证码');
+                        self.$errorTips.show('请填写验证码');
                         return;
                     }
 
-                    //注册账户
-                    request.signin(this.data.postedData,function(){
-                        location.href = '/';
-                    },function(msg){
-                        self.data.src = vercode + '?random=' + Math.random();
-                        dialog.showError(msg);
+                    //登陆
+                    this.$net.request({
+                        request:request.signin,
+                        data:postedData,
+                        success:function(){
+                            location.href = '/';
+                        },
+                        error:function(msg){
+                            self.data.src = vercode + '?random=' + Math.random();
+                            self.$errorTips.show(msg);
+                        }
                     });
                 },
                 'changevercode':function(){

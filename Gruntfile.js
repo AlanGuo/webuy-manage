@@ -582,15 +582,24 @@ module.exports = function (grunt) {
 
     
     tmod: {
-      template: {
-        src: 'tmp/view/**/*.html',
-        dest: 'tmp/view/compiled/view.js',
-        options: {
-            base: 'tmp/view',
-            minify:false,
-            namespace:'webuymanagetmpl'
-        } 
-      }
+      spaseedtemplate: {
+          src: ['spm_modules/spaseed/1.1.18/view/**/*.html'],
+          dest: 'tmp/spaseed/view/view.js',
+          options: {
+              base: 'spm_modules/spaseed/1.1.18/view',
+              minify: false,
+              namespace:'spaseedtemplate'
+          }
+        },
+        template: {
+          src: 'tmp/view/**/*.html',
+          dest: 'tmp/view/compiled/view.js',
+          options: {
+              base: 'tmp/view',
+              minify:false,
+              namespace:'webuymanagetmpl'
+          } 
+        }
     },
     
 
@@ -626,11 +635,16 @@ module.exports = function (grunt) {
             'App': 'spm_modules/spaseed/1.1.18/main/App',
             'Node': 'spm_modules/spaseed/1.1.18/main/Node',
             'View': 'spm_modules/spaseed/1.1.18/main/View',
-            'TopBottomView': 'spm_modules/spaseed/1.1.18/main/TopBottomView',
-            'Router': 'spm_modules/spaseed/1.1.18/main/H5Router',
+            'SideBarView': 'spm_modules/spaseed/1.1.18/main/SideBarView',
+            'Router': 'spm_modules/spaseed/1.1.18/main/Router',
+            'AppRouter' :'spm_modules/spaseed/1.1.18/main/H5Router',
 
             'Net': 'spm_modules/spaseed/1.1.18/lib/Net',
             'Event': 'spm_modules/spaseed/1.1.18/lib/Event',
+            'Dialog': 'spm_modules/spaseed/1.1.18/lib/Dialog',
+            'Mask': 'spm_modules/spaseed/1.1.18/lib/Mask',
+            'ErrorTips': 'spm_modules/spaseed/1.1.18/lib/ErrorTips',
+            'Loading': 'spm_modules/spaseed/1.1.18/lib/Loading',
             
             'cookie': 'spm_modules/spaseed/1.1.18/lib/cookie',
             'querystring':'spm_modules/spaseed/1.1.18/lib/querystring',
@@ -639,13 +653,15 @@ module.exports = function (grunt) {
             'formatcheck':'spm_modules/spaseed/1.1.18/lib/formatcheck',
             'stats':'spm_modules/spaseed/1.1.18/lib/stats',
             'asyncrequest':'spm_modules/spaseed/1.1.18/lib/asyncrequest',
+            'dialog':'spm_modules/spaseed/1.1.18/lib/dialog',
 
             //external
             'config': 'spm_modules/spaseed/1.1.18/config',
             
             'template': 'spm_modules/spaseed/1.1.18/lib/template',
             'apptemplate': 'tmp/view/compiled/view',
-            'env': 'app/script/main/env'
+            'env': 'app/script/main/env',
+            'request':'app/script/model/request',
           },
           
           dest:'dist/script/app.combo.js'

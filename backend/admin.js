@@ -26,13 +26,13 @@ var admin = {
 		
 		if(/post/i.test(request.method)){
 			var postData = qs.parse(request.body);
-			if(security.vercode() === postData.vercode){
+			if(security.vercode() == postData.vercode){
 				pool.getConnection(function(err, connection){
 					if(err){
 						console.log(err);
 					}
 					else{
-						var comlumns = [user_email,user_mobile,user_password];
+						var comlumns = ['user_email','user_mobile','user_password'];
 						var sql = mysql.format('select ?? from webuy.user where user_type=2 and user_email=? or user_mobile=?',[comlumns,postData.login,postData.login]);
 						connection.query(sql,function(err, rows){
 							connection.release();

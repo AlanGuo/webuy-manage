@@ -2,24 +2,41 @@
 
 define(function(require, exports, module){
 	var $ = require('$'),
-		View = require('View');
+		View = require('View'),
+		MenuView = require('MenuView'),
+		template = require('template');
 	
-	var TopBottomView = View.extend({
+	var SideBarView = View.extend({
 		$elem:$('#wrapper-all'),
 		/*其他控制元素*/
-		elements:{
-		},
+		elements:{},
 
 		ctor:function(data){
 			this.$super(data);
-			this.$elem.html('<div class="header"></div><div class="body"><div class="side-bar" id="sidebar"></div><div id="container" class="container"></div></div>');
-			this.elements.sidebar = $('#sidebar');
-			this.elements.container = $('#container');
+
+			var sidebar = $(data.sidebar || '#sidebar'),
+				container = $(data.container || '#container');
+
+			if(!sidebar.length || !container.length){
+				this.$elem.html(template('sidebartemplate'));
+				this.elements.$sidebar = $(data.sidebar ||'#sidebar');
+				this.elements.$container = $(data.container ||'#container');
+			}
+			else{
+				this.elements.$sidebar = sidebar;
+				this.elements.$container = container;
+			}
+
+			data.$elem = this.elements.$sidebar;
+			//menuview控制
+			this.$menu = new MenuView(data);
 		},
 
 		renderContent:function(option){
-			this.elements.container.html(option.container);
-			this.elements.sidebar.html(option.sidebar);
+			this.elements.$container.html(option.container);
+			this.elements.$sidebar.html(option.sidebar);
+
+			this.$menu.render();
 		},
 
 		/*重载*/
@@ -35,5 +52,5 @@ define(function(require, exports, module){
 		}
 	})
 
-	module.exports = TopBottomView;
+	module.exports = SideBarView;
 })
