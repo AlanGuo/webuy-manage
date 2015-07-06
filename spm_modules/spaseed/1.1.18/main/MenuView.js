@@ -14,8 +14,8 @@ define(function(require, exports, module){
 		events:{
 			'click':{
 				'select':function(target){
-					this.$elem.find(this.data.itemType || 'li').removeClass(this.data.activeClass||'cur');
-					$(target).addClass(this.data.activeClass || 'cur');
+					this.$elem.find(this.data.itemtype || 'li').removeClass('cur');
+					$(target).addClass('cur');
 				}
 			}
 		}

@@ -38,7 +38,7 @@ define(function(require, exports, module){
 			return Array.prototype.slice.call(elemarray[0].children);
 		};
 		elemarray.html = function(content){
-			if(content){
+			if(content!=null){
 				for(var i=0;i<elemarray.length;i++){
 					elemarray[i].innerHTML = content;
 				}
@@ -48,7 +48,7 @@ define(function(require, exports, module){
 			}
 		};
 		elemarray.text = function(content){
-			if(content){
+			if(content!=null){
 				for(var i=0;i<elemarray.length;i++){
 					elemarray[i].innerText = content;
 				}
@@ -95,7 +95,7 @@ define(function(require, exports, module){
 			return elemarray;
 		};
 		elemarray.data = function(name, val){
-			if(val){
+			if(val!=null){
 				for(var i=0;i<elemarray.length;i++){
 					elemarray[i].setAttribute('data-'+name,val);
 				}
@@ -168,17 +168,23 @@ define(function(require, exports, module){
 				options.error(xhr);
 			}
 		};
+		var str = '';
+	    for(var p in options.data){
+	    	str+=encodeURIComponent(p)+'='+encodeURIComponent(options.data[p])+'&';
+	    }
+	    str = str.substring(0,str.length-1);
+
+	    if(/get/i.test(options.method)){
+	    	options.url += '?'+str;
+	    	str = '';
+	    }
+
 	    xhr.open(options.method,options.url,options.async);
 	    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 	    for(var p in options.header){
 	    	xhr.setRequestHeader(p, options.header[p]);
 	    }
-
-	    var str = '';
-	    for(var p in options.data){
-	    	str+=encodeURIComponent(p)+'='+encodeURIComponent(options.data[p])+'&';
-	    }
-	    xhr.send(str.substring(0,str.length-1));
+	    xhr.send();
 
 	    return xhr;
 	};

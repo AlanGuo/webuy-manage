@@ -10,6 +10,9 @@ define(function(require, exports, module) {
 		signup:{
 			url:'/cgi-bin/admin/signup',
 			method:'post'
+		},
+		getproduct:{
+			url:'/cgi-bin/product/get'
 		}
 	};
 

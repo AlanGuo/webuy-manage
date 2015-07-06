@@ -1,24 +1,10 @@
-var crypto = require('crypto');
-var mysql = require('mysql');
-var qs = require('querystring');
-var shortid = require('shortid');
-var security = require('./security');
-var util = require('./util');
-
-var mysqlConnection = {
-  host     : '58.96.185.53',
-  user     : 'root',
-  password : 'Siemenlon123'
-};
-var pool = mysql.createPool(mysqlConnection);
-
-var connectCallback = function(err){
-	if (err) {
-	    console.error('error connecting: ' + err.stack);
-	    return;
-	  }
-	  console.log('connected as id ' + connection.threadId);
-};
+var crypto = require('crypto'),
+	qs = require('querystring'),
+	mysql = require('mysql'),
+	shortid = require('shortid'),
+	security = require('./security'),
+	util = require('./util'),
+	connection = require('./connection');
 
 var admin = {
 	///cgi-bin/admin/signin
@@ -27,9 +13,16 @@ var admin = {
 		if(/post/i.test(request.method)){
 			var postData = qs.parse(request.body);
 			if(security.vercode() == postData.vercode){
-				pool.getConnection(function(err, connection){
+				connection.pool.getConnection(function(err, connection){
 					if(err){
 						console.log(err);
+						util.jsonRespond(response,{
+							code:501,
+							data:{},
+							msg:'get connection failed'
+						},{
+							status:500
+						});
 					}
 					else{
 						var comlumns = ['user_email','user_mobile','user_password'];
@@ -47,7 +40,7 @@ var admin = {
 									}
 									else{
 										util.jsonRespond(response,{
-											code:111,
+											code:101,
 											data:{},
 											msg:'登录名或密码错误'
 										});
@@ -55,7 +48,7 @@ var admin = {
 								}
 								else{
 									util.jsonRespond(response,{
-										code:112,
+										code:102,
 										data:{},
 										msg:'登录名或密码错误'
 									});
@@ -64,7 +57,7 @@ var admin = {
 							else{
 								console.log(err);
 								util.jsonRespond(response,{
-									code:500,
+									code:502,
 									data:{},
 									msg:'query user failed'
 								},{
@@ -102,9 +95,16 @@ var admin = {
 			var postData = qs.parse(request.body);
 			if(security.vercode() == postData.vercode){
 				
-				pool.getConnection(function(err, connection){
+				connection.pool.getConnection(function(err, connection){
 					if(err){
 						console.log(err);
+						util.jsonRespond(response,{
+							code:501,
+							data:{},
+							msg:'get connection failed'
+						},{
+							status:500
+						});
 					}else{
 						var comlumns = ['user_mobile','user_email'];
 						var sql = mysql.format('select ?? from webuy.user where user_mobile=? or user_email=?',[comlumns,postData.usermobile,postData.useremail]);
@@ -158,7 +158,11 @@ var admin = {
 									0];
 									var sql = mysql.format('insert into webuy.user (??) values (?)',[comlumns,values]);
 									connection.query(sql, 
-										function(err, rows) {
+									function(err, rows) {
+										if(err){
+
+										}
+										else{
 											connection.release();
 											if(!err){
 												util.jsonRespond(response,{
@@ -177,12 +181,13 @@ var admin = {
 													status:500
 												});
 											}
+										}
 									});
 								}
 							}else{
 								console.log(err);
 								util.jsonRespond(response,{
-									code:500,
+									code:502,
 									data:{},
 									msg:'query user_mobile,user_email failed'
 								},{

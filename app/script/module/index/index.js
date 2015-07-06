@@ -2,11 +2,11 @@
 
 define(function (require, exports, module) {
     var template = require('template'),
-        SideBarView = require('SideBarView');
+        CustomSideBarView = require('CustomSideBarView');
 
-    var indexPageView = SideBarView.extend({
+    var indexPageView = CustomSideBarView.extend({
 
-        render: function () {
+        render: function (){
             this.renderContent({
                 sidebar:template('sidebar'),
                 container:template('index')

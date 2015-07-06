@@ -1,0 +1,77 @@
+<tr>
+	<th>
+		<input type="checkbox">
+	</th>
+	<th>
+		商品编号
+	</th>
+	<th>
+		商品名称
+	</th>
+	<th>
+		封面图
+	</th>
+	<th>
+		商品分类
+	</th>
+	<th>
+		商品价格
+	</th>
+	<th>
+		总量
+	</th>
+	<th>
+		上架时长（天）
+	</th>
+	
+	<th>
+		是/否上架
+	</th>
+	<th style="width:18%;">
+		操作
+	</th>
+</tr>
+{{each product as item}}
+<tr>
+	<td>
+		<input type="checkbox">
+	</td>
+	<td>
+		{{item.product_serial}}
+	</td>
+	<td>
+		<a href="#nolink">
+			{{item.product_name}}
+		</a>
+	</td>
+	<td>
+		<img src="{{item.product_image}}" alt="{{item.product_name}}">
+	</td>
+	<td>
+		<a href="#nolink">
+			{{item.product_type}}
+		</a>
+	</td>
+	<td>{{item.product_price/100}}</td>
+	<td>
+		{{item.product_count}}
+	</td>
+	<td>
+		{{item.product_timeleft}}
+	</td>
+	<td>
+		<div class="status">待上架</div>
+		<div class="status hide">已上架</div>
+		<div class="status hide">已过期</div>
+	</td>
+	<td>
+		<div class="operate">
+			<a href="javascript:;" class="btn-del">删除</a>
+			<a href="javascript:;" class="btn-edit">编辑</a>
+			<a href="javascript:;" class="btn-putaway">上架</a>
+			<a href="javascript:;" class="btn-putaway hide">下架</a>
+			<a href="javascript:;" class="btn-putaway hide">重新上架</a>
+		</div>
+	</td>
+</tr>
+{{/each}}

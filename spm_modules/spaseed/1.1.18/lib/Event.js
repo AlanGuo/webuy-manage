@@ -37,18 +37,20 @@ define(function(require, exports, module) {
 	};
 	
 	//获取元素中包含事件的第一个子元素
-	var getWantTarget = function(evt, topElem, type, judgeFn){
+	var getWantTargets = function(evt, topElem, type, judgeFn){
 		
 		if(topElem.length){topElem = topElem[0]}
 
 		judgeFn = judgeFn || this.judgeFn || _defalutJudgeFn;
 		
+		var targetArray = [];
+
 		var _targetE = evt.srcElement || evt.target;
 		
-		while( _targetE  ){
+		while( _targetE ){
 			
 			if(judgeFn(_targetE, type)){
-				return _targetE;
+				targetArray.push(_targetE);
 			}
 			
 			if( topElem == _targetE ){
@@ -58,7 +60,7 @@ define(function(require, exports, module) {
 			_targetE= _targetE.parentNode;
 			
 		}
-		return null;
+		return targetArray;
 	};
 
 	var Event = mp.Class.extend({
@@ -91,23 +93,25 @@ define(function(require, exports, module) {
 				/**
 				 * 支持直接绑定方法
 				 */
-				var _target = getWantTarget(e, topElem, orginType, judgeFn), _hit = false;
+				var _target = getWantTargets(e, topElem, orginType, judgeFn), _hit = false;
 				
-				if (_target) {
-					var _event = _defaultGetEventkeyFn(_target, orginType);
-					var _returnValue;
+				if (_target.length) {
+					for(var i=0;i<_target.length;i++){
+						var _event = _defaultGetEventkeyFn(_target[i], orginType);
+						var _returnValue;
 
-					if(handlerMap && handlerMap[_event]){
-						_returnValue = handlerMap[_event].call(inst, _target, e, _event);
-						_hit = true;
-					}
-					if(_hit){
-						if(!_returnValue){
-							if(e.preventDefault){
-				                e.preventDefault();
+						if(handlerMap && handlerMap[_event]){
+							_returnValue = handlerMap[_event].call(inst, _target[i], e, _event);
+							_hit = true;
+						}
+						if(_hit){
+							if(!_returnValue){
+								if(e.preventDefault){
+					                e.preventDefault();
+								}
+					            else
+					                e.returnValue = false;
 							}
-				            else
-				                e.returnValue = false;
 						}
 					}
 				}

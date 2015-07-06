@@ -80,7 +80,7 @@ define(function (require, exports, module) {
                 request.fakecallback(data, cb);
             }
             else{
-                this[request.method](request.url, data, cb);
+                this[(request.method || 'get').toLowerCase()](request.url, data, cb);
             }
         },
 

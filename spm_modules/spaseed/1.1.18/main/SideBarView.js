@@ -1,5 +1,13 @@
 'use strict';
 
+/**
+ * SideBarView
+ * sidebarId
+ * sidebarTemplate
+ * sidebarData
+ * containerId
+ */
+
 define(function(require, exports, module){
 	var $ = require('$'),
 		View = require('View'),
@@ -13,29 +21,34 @@ define(function(require, exports, module){
 
 		ctor:function(data){
 			this.$super(data);
-
-			var sidebar = $(data.sidebar || '#sidebar'),
-				container = $(data.container || '#container');
-
-			if(!sidebar.length || !container.length){
-				this.$elem.html(template('sidebartemplate'));
-				this.elements.$sidebar = $(data.sidebar ||'#sidebar');
-				this.elements.$container = $(data.container ||'#container');
-			}
-			else{
-				this.elements.$sidebar = sidebar;
-				this.elements.$container = container;
-			}
-
+			this.renderTemplate(data);
 			data.$elem = this.elements.$sidebar;
 			//menuview控制
 			this.$menu = new MenuView(data);
 		},
 
-		renderContent:function(option){
-			this.elements.$container.html(option.container);
-			this.elements.$sidebar.html(option.sidebar);
+		renderTemplate:function(data){
+			var sidebar = $(data.sidebarId || '#sidebar'),
+				container = $(data.containerId || '#container');
 
+			if(!sidebar.length || !container.length){
+				this.$elem.html(template(data.sidebarTemplate ||'sidebartemplate',data.sidebarData));
+				this.elements.$sidebar = $(data.sidebarId || '#sidebar');
+				this.elements.$container = $(data.containerId || '#container');
+			}
+			else{
+				this.elements.$sidebar = sidebar;
+				this.elements.$container = container;
+			}
+		},
+
+		renderContent:function(option){
+			if(option.container !== undefined){
+				this.elements.$container.html(option.container);
+			}
+			if(option.sidebar !== undefined){
+				this.elements.$sidebar.html(option.sidebar);
+			}
 			this.$menu.render();
 		},
 
