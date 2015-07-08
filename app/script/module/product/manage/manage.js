@@ -5,9 +5,20 @@ define(function (require, exports, module) {
         template = require('template'),
         request = require('request'),
         asyncRequest = require('asyncrequest'),
+        binder = require('binder'),
         CustomSideBarView = require('CustomSideBarView');
 
-    var ProductManagepageView = CustomSideBarView.extend({
+    var ProductManagePageView = CustomSideBarView.extend({
+
+        pageSize: 10,
+
+        binded:false,
+
+        //绑定的数据
+        data:{
+            activeTab:'offthecourt',
+            gridData:[]
+        },
 
         render: function () {
             var sidebar = $('#side-nav').length?undefined:template('sidebar',{cur:'manage'});
@@ -15,21 +26,41 @@ define(function (require, exports, module) {
                 sidebar:sidebar,
                 container:template('product/manage')
             });
+            this.loadGrid(0,0,0);
+            binder.bind(this.$elem,this.data);
+        },
 
-            this.elements.$tablebody = $('#tbody');
-
+        loadGrid:function(onthecourt,expired, begin){
             var self = this;
-            asyncRequest.all(this.$net,
-            [{
+            asyncRequest.all(this.$net,[{
                 request:request.getproduct,
-                params:{onthecourt:false}
+                params:{onthecourt:onthecourt, expired:expired, begin:begin, size:self.pageSize}
             }],
             function(data){
-                self.elements.$tablebody.html(template('product/productitem',data[0]));
-            },function(){
+                //self.elements.$tablebody.html(template('product/productitem',data[0]));
+                self.data.gridData = data[0].product;
+            },
+            function(){
             });
+        },
+
+        events:{
+            'click':{
+                'offthecourt':function(){
+                    this.data.activeTab = 'offthecourt';
+                    this.loadGrid(0,0,0);
+                },
+                'onthecourt':function(){
+                    this.data.activeTab = 'onthecourt';
+                    this.loadGrid(1,0,0);
+                },
+                'expired':function(){
+                    this.data.activeTab = 'expired';
+                    this.loadGrid(1,1,0);
+                }
+            }
         }
     });
         
-    module.exports = ProductManagepageView;
+    module.exports = ProductManagePageView;
 });

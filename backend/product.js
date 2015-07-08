@@ -6,7 +6,8 @@ var connection = require('./connection'),
 var product ={
 	'get':function(pathname, request, response, config){
 		if(/get/i.test(request.method)){
-			var query = qs.parse(request.parsedUrl.query);
+			var query = qs.parse(request.parsedUrl.query),
+				expiredQuery = '';
 			connection.pool.getConnection(function(err, connection){
 				if(err){
 					console.log(err);
@@ -22,7 +23,7 @@ var product ={
 					var comlumns = [
 						'product_serial',
 						'product_name',
-						'product_type',
+						'pt_name',
 						'product_image',
 						'product_price',
 						'product_count',
@@ -30,7 +31,17 @@ var product ={
 						'product_onthecourt',
 						'product_oncourtdate'
 					];
-					var sql = mysql.format('select ?? from webuy.product where product_onthecourt=?',[comlumns,query.onthecourt]);
+					if(query.expired*1){
+						query.onthecourt = 1;
+						expiredQuery = 'and DATEDIFF(now(),product_oncourtdate)>product_timeleft';
+					}
+					var sql = mysql.format('select ?? from webuy.product join webuy.producttype where product_onthecourt=? '+expiredQuery+' order by product_updatetime limit ?,?',
+					[
+						comlumns,
+						query.onthecourt*1,
+						query.begin*1 || 0,
+						query.size*1 || 10
+					]);
 					connection.query(sql,function(err, rows){
 						connection.release();
 						if(!err){

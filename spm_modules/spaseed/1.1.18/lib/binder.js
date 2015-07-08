@@ -3,16 +3,16 @@
  * 绑定模块，提供双向绑定功能
  */
 
-'use strict';
-
 define(function(require, exports, module) {
 	var selectors = '[bind-content],[bind-value],[bind-attr]';
 
 	var binders = {
 		value:function(node, onchange) {
-	        node.addEventListener('keyup', function() {
-	            onchange(node.value);
-	        });
+			if(onchange){
+		        node.addEventListener('keyup', function() {
+		            onchange(node.value);
+		        });
+		    }
 	        return {
 	            updateProperty: function(value) {
 	                if (value !== node.value) {
@@ -24,7 +24,7 @@ define(function(require, exports, module) {
 	    content: function(node) {
 	        return {
 	            updateProperty: function(value) {
-	                node.textContent = value;
+	                node.innerText = value;
 	            }
 	        };
 	    },
@@ -46,8 +46,8 @@ define(function(require, exports, module) {
 	    },
 	    attribute: function(node, onchange, object, attrname){
 	    	return {
-	            updateProperty: function(value,attrname) {
-	                node.setAttribute(attrname, value);
+	            updateProperty: function(expr, attrname){
+	            	node.setAttribute(attrname,expr);
 	            }
 	        };
 	    }
@@ -55,43 +55,77 @@ define(function(require, exports, module) {
 
 	var bindEngine = {
 		bind:function(container, object){
-			function getDirectObject(object, propertyName){
-				var val = object;
-				if(/\./.test(propertyName)){
-					var pnamearray = propertyName.split('.');
-					for(var i=0;i<pnamearray.length-1;i++){
-						if(val){
-							val = val[pnamearray[i]];
+			function getDirectObject(object, property){
+				
+				var getdo = function(object, propertyName){
+					var val = object;
+					//properties是对象
+					if(/\./.test(propertyName)){
+						var pnamearray = propertyName.split('.');
+						for(var i=0;i<pnamearray.length-1;i++){
+							if(val){
+								val = val[pnamearray[i]];
+							}
+							else{
+								break;
+							}
 						}
-						else{
-							break;
-						}
+						return val;
 					}
-					return val;
+					else{
+						return object;
+					}
 				}
-				else{
-					return object;
-				}
+
+				
+				return getdo(object, property);
 			}
 			function bindObject(node, binderName, object, propertyName) {
 				//绑定属性
 				var observer = null;
 				var bindProperty = function(bnName, propObj){
-					var prop = propObj.prop,
-						attr = propObj.attr;
+					var expr = propObj.expr,
+						attr = propObj.attr,
+						isexpr = false,
+						exprval = '',
+						dobject = object;
 
-					var dobject = getDirectObject(object,prop),
-					dproperty = prop.split('.').slice(-1)[0];
+					//从表达式中抓去属性值
+					var props = expr.match(/\{.*?\}/);
+					if(props){
+						for(var i=0;i<props.length;i++){
+							props[i] = props[i].replace(/\{|\}/g,'');
+						}
+						isexpr = true;
+					}
 
-			        var updateValue = function(newValue) {
-			            dobject[dproperty] = newValue;
+					if(isexpr){
+						for(var i=0;i<props.length;i++){
+							var p = props[i];
+							expr = expr.replace(new RegExp('\\{'+p+'\\}','g'), p);
+						}
+						//解析表达式
+						with(object){
+							exprval = eval(expr);
+						}
+					}
+					else{
+						dobject = getDirectObject(object,expr);
+						exprval = dobject[expr];
+					}
+					
+
+					//控件值改变了更新对象
+			        var updateValue = isexpr?null:function(newValue) {
+			            dobject[expr] = newValue;
 			        };
+
 			        var binder = binders[bnName](node, updateValue, object, attr);
-			        binder.updateProperty(dobject[dproperty],attr);
+			        binder.updateProperty(exprval,attr);
 
 			        return {
-			        	dobject:dobject,
-			        	dproperty:dproperty,
+			        	object:dobject,
+			        	expr:expr,
 			        	binder:binder,
 			        	attribute:attr
 			        };
@@ -105,9 +139,8 @@ define(function(require, exports, module) {
 					var index =null; 
 		            var changed = changes.some(function(change) {
 		            	return objArray.filter(function(item,i){
-		            		if(change.name === item.dproperty && 
-		            			change.object === item.dobject){
-		            			
+		            		if(item.expr.indexOf(change.name)>-1  && 
+		            			change.object === item.object){
 		            			index = i;
 		            			return item;
 		            		};
@@ -115,7 +148,11 @@ define(function(require, exports, module) {
 		            });
 		            if (changed && objArray!=null) {
 		            	var obj = objArray[index];
-		                obj.binder.updateProperty(obj.dobject[obj.dproperty],obj.attribute);
+		            	//解析表达式
+						with(obj.object){
+							exprval = eval(obj.expr);
+						}
+		                obj.binder.updateProperty(exprval,obj.attribute);
 		            }
 		        };
 
@@ -144,12 +181,12 @@ define(function(require, exports, module) {
 		            };
 		        }
 
-		        delete node.dataset.repeat;
+		        node.removeAttribute('bind-repeat');
 		        var parent = node.parentNode;
 		        var captured = capture(node);
 		        var bindItem = function(element) {
 		        	//为每一个repeat元素设置绑定
-		            return bindModel(captured.insert(), element);
+		            return bindEngine.bind(captured.insert(), element);
 		        };
 		        //根据array生成bindings
 		        var bindings = array.map(bindItem);
@@ -161,7 +198,7 @@ define(function(require, exports, module) {
 		                    bindings.push(bindItem(array[index]));
 		                } else if (change.type === 'update') {
 		                    bindings[index].unobserve();
-		                    bindModel(parent.children[index], array[index]);
+		                    bindEngine.bind(parent.children[index], array[index]);
 		                } else if (change.type === 'delete') {
 		                    bindings.pop().unobserve();
 		                    child = parent.children[index];
@@ -182,7 +219,7 @@ define(function(require, exports, module) {
 			function isDirectNested(node) {
 	            node = node.parentElement;
 	            while (node) {
-	                if (node.dataset.repeat) {
+	                if (node.getAttribute('bind-repeat')) {
 	                    return false;
 	                }
 	                node = node.parentElement;
@@ -201,27 +238,27 @@ define(function(require, exports, module) {
 	        	var bindType = [],
 	        		propertyName = [],
 	        		attributeName;
+
 	        	if(node.getAttribute('bind-value')){
 	        		bindType.push('value');
-	        		propertyName.push({prop:node.getAttribute('bind-value')});
+	        		propertyName.push({expr:node.getAttribute('bind-value')});
 	        	}
 	        	if(node.getAttribute('bind-content')){
 	        		bindType.push('content');
-	        		propertyName.push({prop:node.getAttribute('bind-content')});
+	        		propertyName.push({expr:node.getAttribute('bind-content')});
 	        	}
 	        	if(node.getAttribute('bind-attr')){
 	        		var keyvalArray = node.getAttribute('bind-attr').split(',');
-	        		
 	        		for(var i=0;i<keyvalArray.length;i++){
-        				var keyval = keyvalArray[i].split('=');
+        				var keyval = /(.*?)=(.*)/.exec(keyvalArray[i]);
         				bindType.push('attribute');
-        				propertyName.push({prop:keyval[1],attr:keyval[0]});
+        				propertyName.push({expr:keyval[2],attr:keyval[1]});
 	        		}
 	        	}
 	        	return bindObject(node, bindType, object, propertyName);
 
-		    }).concat(onlyDirectNested('[data-repeat]').map(function(node) {
-		    	return bindCollection(node, object[node.dataset.repeat]);
+		    }).concat(onlyDirectNested('[bind-repeat]').map(function(node) {
+		    	return bindCollection(node, object[node.getAttribute('bind-repeat')]);
 		    }));
 	        return {
 	            unobserve: function() {
