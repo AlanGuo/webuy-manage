@@ -17,7 +17,9 @@ define(function (require, exports, module) {
         //绑定的数据
         data:{
             activeTab:'offthecourt',
-            gridData:[]
+            gridData:{
+                product:[]
+            }
         },
 
         render: function () {
@@ -38,7 +40,7 @@ define(function (require, exports, module) {
             }],
             function(data){
                 //self.elements.$tablebody.html(template('product/productitem',data[0]));
-                self.data.gridData = data[0].product;
+                self.data.gridData.product = data[0].product;
             },
             function(){
             });

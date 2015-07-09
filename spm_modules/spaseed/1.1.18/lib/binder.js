@@ -82,7 +82,6 @@ define(function(require, exports, module) {
 			}
 			function bindObject(node, binderName, object, propertyName) {
 				//绑定属性
-				var observer = null;
 				var bindProperty = function(bnName, propObj){
 					var expr = propObj.expr,
 						attr = propObj.attr,
@@ -95,15 +94,12 @@ define(function(require, exports, module) {
 					if(props){
 						for(var i=0;i<props.length;i++){
 							props[i] = props[i].replace(/\{|\}/g,'');
+							expr = expr.replace(new RegExp('\\{'+props[i]+'\\}','g'), props[i]);
 						}
 						isexpr = true;
 					}
 
 					if(isexpr){
-						for(var i=0;i<props.length;i++){
-							var p = props[i];
-							expr = expr.replace(new RegExp('\\{'+p+'\\}','g'), p);
-						}
 						//解析表达式
 						with(object){
 							exprval = eval(expr);
@@ -111,10 +107,9 @@ define(function(require, exports, module) {
 					}
 					else{
 						dobject = getDirectObject(object,expr);
-						exprval = dobject[expr];
+						exprval = dobject[expr.split('.').slice(-1)[0]];
 					}
 					
-
 					//控件值改变了更新对象
 			        var updateValue = isexpr?null:function(newValue) {
 			            dobject[expr] = newValue;
@@ -135,7 +130,7 @@ define(function(require, exports, module) {
 				for(var i=0;i<binderName.length;i++){
 					objArray.push(bindProperty(binderName[i], propertyName[i]));
 				}
-				observer = function(changes) {
+				var observer = function(changes) {
 					var index =null; 
 		            var changed = changes.some(function(change) {
 		            	return objArray.filter(function(item,i){
@@ -165,32 +160,40 @@ define(function(require, exports, module) {
 		        };
 		    }
 
-		    function bindCollection(node, array) {
+		    function bindCollection(node, array, object, parent) {
+		    	array = array || [];
+		    	var newNodeCollection = [];
 		    	//捕捉自己并且把自己删除
 		        function capture(original) {
-		            var before = original.previousSibling;
-		            var parent = original.parentNode;
 		            var node = original.cloneNode(true);
-		            original.parentNode.removeChild(original);
+		            if(Array.prototype.slice.call(parent.children).indexOf(original)>-1){
+		            	parent.removeChild(original);
+		            }
 		            return {
 		                insert: function() {
 		                    var newNode = node.cloneNode(true);
-		                    parent.insertBefore(newNode, before);
+		                    newNodeCollection.push(newNode);
+		                    parent.appendChild(newNode);
 		                    return newNode;
 		                }
 		            };
 		        }
 
 		        node.removeAttribute('bind-repeat');
-		        var parent = node.parentNode;
+
+		        parent = parent || node.parentNode;
 		        var captured = capture(node);
-		        var bindItem = function(element) {
+		        var bindItem = function(obj) {
 		        	//为每一个repeat元素设置绑定
-		            return bindEngine.bind(captured.insert(), element);
+		        	var elem = captured.insert()
+		        	elem.style.display = '';
+		            return bindEngine.bind(elem, obj);
 		        };
 		        //根据array生成bindings
 		        var bindings = array.map(bindItem);
-		        var observer = function(changes) {
+
+
+		        var arrObserver = function(changes) {
 		            changes.forEach(function(change) {
 		                var index = parseInt(change.name, 10), child;
 		                if (isNaN(index)) return;
@@ -206,12 +209,15 @@ define(function(require, exports, module) {
 		                }
 		            });
 		        };
+
 		        //observe array
-		        Object.observe(array, observer);
+		        Object.observe(array, arrObserver);
+
 		        return {
 		            unobserve: function() {
-		                Object.unobserve(array, observer);
-		            }
+		                Object.unobserve(array, arrObserver);
+		            },
+		            newNodeCollection:newNodeCollection
 		        };
 		    }
 
@@ -258,7 +264,67 @@ define(function(require, exports, module) {
 	        	return bindObject(node, bindType, object, propertyName);
 
 		    }).concat(onlyDirectNested('[bind-repeat]').map(function(node) {
-		    	return bindCollection(node, object[node.getAttribute('bind-repeat')]);
+
+		    	var arrayName = node.getAttribute('bind-repeat'),
+		    		parent = node.parentNode,
+		    		dobject = object,
+		        	dproperty = arrayName,
+		        	isexpr = false,
+		        	collectionBinder;
+
+		        var arrayExpr = arrayName.match(/\{.*?\}/);
+		        if(arrayExpr){
+		        	isexpr = true;
+		        	for(var i=0;i<arrayExpr.length;i++){
+						var p = arrayExpr[i].replace(/\{|\}/g,'');
+						dproperty = dproperty.replace(new RegExp('\\{'+p+'\\}','g'), p);
+					}
+		        	
+		        }
+		        else{
+		        	dobject = getDirectObject(object,dproperty);
+		        	dproperty = dproperty.split('.').slice(-1)[0];
+		        }
+
+		        var getArrayExp = function(){
+		        	var arrayExprVal = '';
+		        	if(isexpr){
+		        		//表达式
+			        	with(object){
+			        		arrayExprVal = eval(dproperty);
+			        	}
+		        	}
+		        	else{
+		        		arrayExprVal = dobject[dproperty];
+		        	}
+
+		        	return arrayExprVal;
+		        }
+
+		    	//绑定object
+		    	var objObserver = function(changes) {
+		            var changed = changes.some(function(change) {
+	            		if(dproperty == change.name && change.object === dobject){
+	            			return true;
+	            		}
+		            });
+		            if (changed) {
+		            	collectionBinder.newNodeCollection.map(function(item){
+		            		parent.removeChild(item);
+		            	});
+		            	collectionBinder = bindCollection(node, getArrayExp(), object, parent);
+		            }
+		        };
+		        
+		        collectionBinder = bindCollection(node, getArrayExp(), object, parent);
+		    	Object.observe(dobject, objObserver);
+
+		    	return {
+		    		unobserve:function(){
+		    			Object.unobserve(object, arrObserver);
+		    			collectionBinder.unobserve();
+		    		}
+		    	}
 		    }));
 	        return {
 	            unobserve: function() {
