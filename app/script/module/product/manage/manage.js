@@ -12,7 +12,7 @@ define(function (require, exports, module) {
 
         pageSize: 10,
 
-        binded:false,
+        binderObject:null,
 
         //绑定的数据
         data:{
@@ -29,7 +29,7 @@ define(function (require, exports, module) {
                 container:template('product/manage')
             });
             this.loadGrid(0,0,0);
-            binder.bind(this.$elem,this.data);
+            this.binderObject = binder.bind(this.$elem,this.data);
         },
 
         loadGrid:function(onthecourt,expired, begin){
@@ -61,6 +61,10 @@ define(function (require, exports, module) {
                     this.loadGrid(1,1,0);
                 }
             }
+        },
+
+        destroy:function(){
+            this.binderObject.unobserve();
         }
     });
         

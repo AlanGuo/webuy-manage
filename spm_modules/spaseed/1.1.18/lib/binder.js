@@ -76,86 +76,103 @@ define(function(require, exports, module) {
 						return object;
 					}
 				}
-
-				
 				return getdo(object, property);
 			}
+
+			function parseExpr(expr, object){
+				var props = expr.match(/\{.*?\}/),
+					isexpr = false,
+					dobjects = [],
+					dproperties = [];
+
+				if(props){
+					for(var i=0;i<props.length;i++){
+						props[i] = props[i].replace(/\{|\}/g,'');
+						expr = expr.replace(new RegExp('\\{'+props[i]+'\\}','g'), props[i]);
+						dobjects.push(getDirectObject(object,props[i]));
+						dproperties.push(props[i].split('.').slice(-1)[0]);
+					}
+					isexpr = true;
+				}
+				if(!isexpr){
+					dobjects.push(getDirectObject(object,expr));
+					dproperties.push(expr.split('.').slice(-1)[0]);
+				}
+
+				return {
+					dobjects:dobjects,
+					dproperties:dproperties,
+					isexpr:isexpr,
+					getValue:function(){
+						if(isexpr){
+							with(object){
+								return eval(expr);
+							}
+						}
+						else{
+							return dobjects[0][dproperties[0]];
+						}
+					}
+				};
+			}
+
 			function bindObject(node, binderName, object, propertyName) {
+				var objArray = [],
+					unobserveArray = [];
 				//绑定属性
 				var bindProperty = function(bnName, propObj){
 					var expr = propObj.expr,
-						attr = propObj.attr,
-						isexpr = false,
-						exprval = '',
-						dobject = object;
+						attr = propObj.attr;
 
 					//从表达式中抓去属性值
-					var props = expr.match(/\{.*?\}/);
-					if(props){
-						for(var i=0;i<props.length;i++){
-							props[i] = props[i].replace(/\{|\}/g,'');
-							expr = expr.replace(new RegExp('\\{'+props[i]+'\\}','g'), props[i]);
-						}
-						isexpr = true;
-					}
-
-					if(isexpr){
-						//解析表达式
-						with(object){
-							exprval = eval(expr);
-						}
-					}
-					else{
-						dobject = getDirectObject(object,expr);
-						exprval = dobject[expr.split('.').slice(-1)[0]];
-					}
+					var parsedObj = parseExpr(expr, object);
 					
 					//控件值改变了更新对象
-			        var updateValue = isexpr?null:function(newValue) {
-			            dobject[expr] = newValue;
+			        var updateValue = parsedObj.isexpr?null:function(newValue) {
+			            parsedObj.dobjects[0][parsedObj.dproperties[0]] = newValue;
 			        };
 
 			        var binder = binders[bnName](node, updateValue, object, attr);
-			        binder.updateProperty(exprval,attr);
+			        binder.updateProperty(parsedObj.getValue(),attr);
 
 			        return {
-			        	object:dobject,
-			        	expr:expr,
+			        	parsedObj:parsedObj,
 			        	binder:binder,
 			        	attribute:attr
 			        };
 				};
 
-				var objArray = [];
 				for(var i=0;i<binderName.length;i++){
 					objArray.push(bindProperty(binderName[i], propertyName[i]));
 				}
-				var observer = function(changes) {
-					var index =null; 
+				var observer = function(changes, dobject, dproperty, binder, val, attr) {
 		            var changed = changes.some(function(change) {
-		            	return objArray.filter(function(item,i){
-		            		if(item.expr.indexOf(change.name)>-1  && 
-		            			change.object === item.object){
-		            			index = i;
-		            			return item;
-		            		};
-		            	}).length;
+	            		if(dproperty == change.name  && 
+	            			change.object == dobject){
+	            			return true;
+	            		};
 		            });
-		            if (changed && objArray!=null) {
-		            	var obj = objArray[index];
-		            	//解析表达式
-						with(obj.object){
-							exprval = eval(obj.expr);
-						}
-		                obj.binder.updateProperty(exprval,obj.attribute);
+		            if (changed) {
+		                binder.updateProperty(val,attr);
 		            }
 		        };
 
-				Object.observe(object, observer);
+		        //数组observer
+		        objArray.map(function(item,index){
+		        	item.parsedObj.dobjects.map(function(dobjitem,dobjindex){
+		        		var func = function(changes){
+		        			observer(changes, dobjitem, item.parsedObj.dproperties[dobjindex], item.binder, item.parsedObj.getValue(), item.attribute);
+		        		};
+		        		unobserveArray.push({object:dobjitem,func:func});
+		        		Object.observe(dobjitem, func);
+		        	});
+		        });
 
 		        return {
 		            unobserve: function() {
-		                Object.unobserve(object, observer);
+		            	unobserveArray.map(function(item){
+		            		Object.unobserve(item.object, item.func);
+		            	});
 		            }
 		        };
 		    }
@@ -267,42 +284,14 @@ define(function(require, exports, module) {
 
 		    	var arrayName = node.getAttribute('bind-repeat'),
 		    		parent = node.parentNode,
-		    		dobject = object,
-		        	dproperty = arrayName,
 		        	isexpr = false,
-		        	collectionBinder;
+		        	collectionBinder,
+		        	unobserveArray = [];
 
-		        var arrayExpr = arrayName.match(/\{.*?\}/);
-		        if(arrayExpr){
-		        	isexpr = true;
-		        	for(var i=0;i<arrayExpr.length;i++){
-						var p = arrayExpr[i].replace(/\{|\}/g,'');
-						dproperty = dproperty.replace(new RegExp('\\{'+p+'\\}','g'), p);
-					}
-		        	
-		        }
-		        else{
-		        	dobject = getDirectObject(object,dproperty);
-		        	dproperty = dproperty.split('.').slice(-1)[0];
-		        }
-
-		        var getArrayExp = function(){
-		        	var arrayExprVal = '';
-		        	if(isexpr){
-		        		//表达式
-			        	with(object){
-			        		arrayExprVal = eval(dproperty);
-			        	}
-		        	}
-		        	else{
-		        		arrayExprVal = dobject[dproperty];
-		        	}
-
-		        	return arrayExprVal;
-		        }
+		        var parsedObj = parseExpr(arrayName,object);
 
 		    	//绑定object
-		    	var objObserver = function(changes) {
+		    	var objObserver = function(changes, dproperty, dobject) {
 		            var changed = changes.some(function(change) {
 	            		if(dproperty == change.name && change.object === dobject){
 	            			return true;
@@ -312,16 +301,25 @@ define(function(require, exports, module) {
 		            	collectionBinder.newNodeCollection.map(function(item){
 		            		parent.removeChild(item);
 		            	});
-		            	collectionBinder = bindCollection(node, getArrayExp(), object, parent);
+		            	collectionBinder = bindCollection(node, parsedObj.getValue(), object, parent);
 		            }
 		        };
 		        
-		        collectionBinder = bindCollection(node, getArrayExp(), object, parent);
-		    	Object.observe(dobject, objObserver);
+		        collectionBinder = bindCollection(node, parsedObj.getValue(), object, parent);
+
+		        parsedObj.dobjects.map(function(dobject,index){
+		        	var func = function(changes){
+		        		objObserver(changes, parsedObj.dproperties[index], dobject);
+		        	};
+		        	unobserveArray.push({object:dobject,func:func});
+		        	Object.observe(dobject, func);
+		        });	
 
 		    	return {
 		    		unobserve:function(){
-		    			Object.unobserve(object, arrObserver);
+		    			unobserveArray.map(function(item){
+		    				Object.unobserve(item.object, item.func);
+		    			});
 		    			collectionBinder.unobserve();
 		    		}
 		    	}
