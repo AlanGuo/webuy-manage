@@ -3,6 +3,7 @@
 define(function (require, exports, module) {
     var $ = require('$'),
         template = require('template'),
+        request = require('request'),
         binder = require('binder'),
         CustomSideBarView = require('CustomSideBarView');
 
@@ -12,6 +13,8 @@ define(function (require, exports, module) {
 
         //绑定的数据
         data:{
+            uploading:false,
+            files:[]
         },
 
         render: function () {
@@ -25,7 +28,25 @@ define(function (require, exports, module) {
 
         events:{
             'click':{
-
+                'uploadCover':function(){
+                    document.getElementById('file-choose').click();
+                }
+            },
+            'change':{
+                'filechange':function(){
+                    var self = this;
+                    this.data.uploading = true;
+                    this.$net.request({
+                        request:request.uploadProductCover,
+                        data:this.files[0],
+                        success:function(){
+                            self.data.uploading = false;
+                        },
+                        error:function(){
+                            self.data.uploading = false;
+                        }
+                    });
+                }
             }
         },
 

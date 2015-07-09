@@ -155,6 +155,10 @@ define(function(require, exports, module){
 		options.async = options.async || true;
 		options.data = options.data || '';
 		options.header = options.header || {};
+		options.type = options.type || 'application/x-www-form-urlencoded';
+		if(/get/i.test(options.method)){
+			options.type = 'application/x-www-form-urlencoded';
+		}
 
 		var xhr = new XMLHttpRequest();
 		xhr.onload = function(){
@@ -168,19 +172,23 @@ define(function(require, exports, module){
 				options.error(xhr);
 			}
 		};
-		var str = '';
-	    for(var p in options.data){
-	    	str+=encodeURIComponent(p)+'='+encodeURIComponent(options.data[p])+'&';
-	    }
-	    str = str.substring(0,str.length-1);
 
-	    if(/get/i.test(options.method)){
-	    	options.url += '?'+str;
-	    	str = '';
-	    }
+		var str = data;
+		if(options.type === 'application/x-www-form-urlencoded'){
+			str = '';
+		    for(var p in options.data){
+		    	str+=encodeURIComponent(p)+'='+encodeURIComponent(options.data[p])+'&';
+		    }
+		    str = str.substring(0,str.length-1);
+
+		    if(/get/i.test(options.method)){
+		    	options.url += '?'+str;
+		    	str = '';
+		    }
+		}
 
 	    xhr.open(options.method,options.url,options.async);
-	    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	    xhr.setRequestHeader('Content-Type', options.type);
 	    for(var p in options.header){
 	    	xhr.setRequestHeader(p, options.header[p]);
 	    }

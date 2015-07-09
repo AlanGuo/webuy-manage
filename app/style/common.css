@@ -105,6 +105,10 @@ body{background: #eee;}
 }
 
 /* structure CSS */
+.wrapper-all{
+	height: 100%;
+	overflow: auto;
+}
 .wrapper{
 	position: relative;
 	overflow:hidden;

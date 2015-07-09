@@ -4,7 +4,7 @@
  */
 
 define(function(require, exports, module) {
-	var selectors = '[bind-content],[bind-value],[bind-attr]';
+	var selectors = '[bind-content],[bind-value],[bind-file],[bind-attr]';
 
 	var binders = {
 		value:function(node, onchange) {
@@ -17,6 +17,20 @@ define(function(require, exports, module) {
 	            updateProperty: function(value) {
 	                if (value !== node.value) {
 	                    node.value = value;
+	                }
+	            }
+	        };
+	    },
+	    file:function(node, onchange){
+	    	if(onchange){
+		        node.addEventListener('change', function() {
+		            onchange(node.files);
+		        });
+		    }
+	        return {
+	            updateProperty: function(value) {
+	                if (value !== node.files) {
+	                    node.files = value;
 	                }
 	            }
 	        };
@@ -265,6 +279,10 @@ define(function(require, exports, module) {
 	        	if(node.getAttribute('bind-value')){
 	        		bindType.push('value');
 	        		propertyName.push({expr:node.getAttribute('bind-value')});
+	        	}
+	        	if(node.getAttribute('bind-file')){
+	        		bindType.push('file');
+	        		propertyName.push({expr:node.getAttribute('bind-file')});
 	        	}
 	        	if(node.getAttribute('bind-content')){
 	        		bindType.push('content');

@@ -170,7 +170,7 @@
 	position: relative;
 }
 .box-infor .row-inpt .ctt .show-window .add-pic .loading{
-	background: url({{cdnpath}}mai/ui/img/loading_big.gif) no-repeat center center;
+	/*background: url() no-repeat center center;*/
 	width:66px;
 	height:66px;
 	position: absolute;

@@ -83,6 +83,8 @@ var product ={
 	},
 	'modify':function(pathname, request, response, config){
 
+	},
+	'uploadcover':function(pathname, request, response, config){
 	}
 };
 

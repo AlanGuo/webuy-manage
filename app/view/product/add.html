@@ -129,7 +129,7 @@
 						<div class="show-window">
 							<!-- 缩略图展示 start 此处只显示一张图，用hide 来切换 -->
 							<div class="thumb-pic hide">
-								<img src="img/testlogo.jpg" alt="">
+								<img src="image/testlogo.jpg" alt="">
 								<a href="#nolink" class="close">
 									<span class="icon-x"></span>
 								</a>
@@ -139,7 +139,7 @@
 							<a href="#nolink" class="add-banner-pic">
 								<span class="icon-add"></span>
 								<span class="loading hide">
-									<img class="w-100 show" src="ui/img/loading.gif" alt="">
+									<img class="w-100 show" src="image/loading.gif" alt="">
 								</span>
 							</a>
 						</div>
@@ -163,17 +163,17 @@
 						<div class="show-window">
 							<!-- 缩略图展示 start 此处只显示一张图，用hide 来切换 -->
 							<div class="thumb-pic hide">
-								<img src="img/testlogo.jpg" alt="">
+								<img src="image/testlogo.jpg" alt="">
 								<a href="#nolink" class="close">
 									<span class="icon-x"></span>
 								</a>
 							</div>
 							<!-- 缩略图展示 end -->
-
-							<a href="#nolink" class="add-pic">
-								<span class="icon-add"></span>
-								<span class="loading hide">
-									<img class="w-100 show" src="ui/img/loading.gif" alt="">
+							<input type="file" data-change-event="filechange" bind-file="files" style="display:none" accept="image/*" id="file-choose">
+							<a data-click-event="uploadCover" class="add-pic">
+								<span class="icon-add" bind-attr="class={uploading}?'icon-add hide':'icon-add'"></span>
+								<span class="loading hide" bind-attr="class={uploading}?'loading':'loading hide'">
+									<img class="w-100 show" src="image/loading.gif" alt="">
 								</span>
 							</a>
 						</div>

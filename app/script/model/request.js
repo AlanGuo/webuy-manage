@@ -13,6 +13,11 @@ define(function(require, exports, module) {
 		},
 		getproduct:{
 			url:'/cgi-bin/product/get'
+		},
+		uploadProductCover:{
+			url:'/cgi-bin/product/uploadcover',
+			method:'post',
+			type:'multipart/form-data'
 		}
 	};
 

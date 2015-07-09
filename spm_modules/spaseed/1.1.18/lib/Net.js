@@ -24,8 +24,8 @@ define(function (require, exports, module) {
          * @param  {Object}   data   参数
          * @param  {Function} cb     回调函数
          */
-        get: function (url, data, cb) {
-            return this._ajax(url, data, 'GET', cb);
+        get: function (url, data, type, cb) {
+            return this._ajax(url, data, 'GET', type, cb);
         },
         
         /**
@@ -35,8 +35,8 @@ define(function (require, exports, module) {
          * @param  {Object}   data   参数
          * @param  {Function} cb     回调函数
          */
-        post: function (url, data, cb) {
-            return this._ajax(url, data, 'POST', cb);
+        post: function (url, data, type, cb) {
+            return this._ajax(url, data, 'POST', type, cb);
         },
 
         request:function(options){
@@ -46,6 +46,7 @@ define(function (require, exports, module) {
                 success = options.success,
                 error = options.error,
                 button = options.button,
+                type = options.type,
                 eventName = null;
                 //恢复按钮
                 if(button){
@@ -80,11 +81,11 @@ define(function (require, exports, module) {
                 request.fakecallback(data, cb);
             }
             else{
-                this[(request.method || 'get').toLowerCase()](request.url, data, cb);
+                this[(request.method || 'get').toLowerCase()](request.url, data, type, cb);
             }
         },
 
-        _ajax: function (url, data, method, cb) {
+        _ajax: function (url, data, method, type, cb) {
             var self =this;
             var returnVal = null;
             var progressBar = null;
@@ -97,6 +98,7 @@ define(function (require, exports, module) {
             this.isBusy = true;
             (function(pbar){
                 returnVal = $.ajax({
+                    type:type,
                     method: method,
                     url: url,
                     data: data,
