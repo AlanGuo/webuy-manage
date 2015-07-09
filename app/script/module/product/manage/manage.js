@@ -17,9 +17,7 @@ define(function (require, exports, module) {
         //绑定的数据
         data:{
             activeTab:'offthecourt',
-            gridData:{
-                product:[]
-            }
+            gridData:[]
         },
 
         render: function () {
@@ -39,8 +37,7 @@ define(function (require, exports, module) {
                 params:{onthecourt:onthecourt, expired:expired, begin:begin, size:self.pageSize}
             }],
             function(data){
-                //self.elements.$tablebody.html(template('product/productitem',data[0]));
-                self.data.gridData.product = data[0].product;
+                self.data.gridData = data[0].product;
             },
             function(){
             });
@@ -59,6 +56,15 @@ define(function (require, exports, module) {
                 'expired':function(){
                     this.data.activeTab = 'expired';
                     this.loadGrid(1,1,0);
+                },
+                'oncourt':function(){
+
+                },
+                'offcourt':function(){
+
+                },
+                'delete':function(){
+
                 }
             }
         },

@@ -619,7 +619,7 @@ module.exports = function (grunt) {
         dist: {
           src: 'dist/index.html',
           editor: function(contents) {
-            return contents.replace(/<\!\-\-\{\{combo\}\}\-\->/ig,'<script type="text/javascript" src="script/app.combo.js"></script>');
+            return contents.replace(/<\!\-\-\{\{combo\}\}\-\->/ig,'<script type="text/javascript" src="script/app.combo.js?max-age=0"></script>');
           }
         }
       },
@@ -636,6 +636,8 @@ module.exports = function (grunt) {
             'Node': 'spm_modules/spaseed/1.1.18/main/Node',
             'View': 'spm_modules/spaseed/1.1.18/main/View',
             'SideBarView': 'spm_modules/spaseed/1.1.18/main/SideBarView',
+            'CustomSideBarView':'app/script/module/CustomSideBarView',
+            'MenuView': 'spm_modules/spaseed/1.1.18/main/MenuView',
             'Router': 'spm_modules/spaseed/1.1.18/main/Router',
             'AppRouter' :'spm_modules/spaseed/1.1.18/main/H5Router',
 
@@ -661,7 +663,7 @@ module.exports = function (grunt) {
             'template': 'spm_modules/spaseed/1.1.18/lib/template',
             'apptemplate': 'tmp/view/compiled/view',
             'env': 'app/script/main/env',
-            'request':'app/script/model/request',
+            'request':'app/script/model/request'
           },
           
           dest:'dist/script/app.combo.js'
@@ -669,7 +671,7 @@ module.exports = function (grunt) {
           files: [{
               expand: true,
               cwd: './',
-              src: ['app/script/entry.js','app/script/module/**/*.js']
+              src: ['app/script/startup.js','app/script/module/**/*.js']
           }]
         }
       }

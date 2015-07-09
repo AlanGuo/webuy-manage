@@ -184,7 +184,7 @@ define(function(require, exports, module){
 	    for(var p in options.header){
 	    	xhr.setRequestHeader(p, options.header[p]);
 	    }
-	    xhr.send();
+	    xhr.send(str);
 
 	    return xhr;
 	};

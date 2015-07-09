@@ -18,6 +18,9 @@ define(function (require, exports, module) {
             data.className = 'login-wrapper';
             this.$super(data);
         },
+
+        binderObject:null,
+
         data:{
             postedData:{
                 login:'',
@@ -30,7 +33,7 @@ define(function (require, exports, module) {
         render: function () {
             this.$elem.html(template('account/signin'));
             this.$errorTips = ErrorTips.create({$elem:$('#errortips')});
-            binder.bind(this.$elem,this.data);
+            this.binderObject = binder.bind(this.$elem,this.data);
         },
 
         events:{
@@ -81,6 +84,7 @@ define(function (require, exports, module) {
         },
 
         destroy: function () {
+            this.binderObject.unobserve();
         }
     });
         

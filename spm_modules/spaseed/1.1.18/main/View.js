@@ -32,11 +32,15 @@ define(function(require, exports, module){
 			if(this.events){
 				this.__bodyhandler = this.__bodyhandler || {};
 				for(var p in this.events){
+					var hasq = false;
 					for(var q in this.events[p]){
+						hasq = true;
 						this.$event.on(this,p,q,this.events[p][q]);
 					}
-					//绑定事件
-					this.__bodyhandler[p] = this.$event.bindEvent(this, this.$elem, p);
+					if(hasq){
+						//绑定事件
+						this.__bodyhandler[p] = this.$event.bindEvent(this, this.$elem, p);
+					}
 				}
 			}
 		},

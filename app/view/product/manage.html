@@ -16,7 +16,7 @@
 	<!-- content start -->
 	<div class="layout-cont">
 		<div class="layout-func">
-			<a href="manage_add_new.html" class="btn-func">新增商品</a>
+			<a data-click-event="router" data-href="/product/add" class="btn-func">新增商品</a>
 			<a href="#nolink" class="btn-func">批量上架</a>
 			<a href="#nolink" class="btn-func">批量下架</a>	
 			<a href="#nolink" class="btn-func">批量删除</a>					
@@ -65,7 +65,7 @@
 									操作
 								</th>
 							</tr>
-							<tr bind-repeat="gridData.product" style="display:none">
+							<tr bind-repeat="gridData" style="display:none">
 								<td>
 									<input type="checkbox">
 								</td>
@@ -140,10 +140,10 @@
 		</div>
 			
 		<div class="layout-func">
-				<a href="manage_add_new.html" class="btn-func">新增商品</a>	
-				<a href="#nolink" class="btn-func">批量上架</a>
-				<a href="#nolink" class="btn-func">批量下架</a>	
-				<a href="#nolink" class="btn-func">批量删除</a>					
+				<a data-click-event="router" data-href="/product/add" class="btn-func">新增商品</a>	
+				<a data-click-event="oncourt" class="btn-func">批量上架</a>
+				<a data-click-event="offcourt" class="btn-func">批量下架</a>	
+				<a data-click-event="delete" class="btn-func">批量删除</a>					
 		</div>
 	</div>
 	<!-- content end -->
