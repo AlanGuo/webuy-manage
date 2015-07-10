@@ -173,7 +173,7 @@ define(function(require, exports, module){
 			}
 		};
 
-		var str = data;
+		var str = options.data;
 		if(options.type === 'application/x-www-form-urlencoded'){
 			str = '';
 		    for(var p in options.data){
