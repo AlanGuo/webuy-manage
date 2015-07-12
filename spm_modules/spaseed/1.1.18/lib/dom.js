@@ -132,6 +132,9 @@ define(function(require, exports, module){
 		elemarray.height = function(){
 			return elemarray[0].clientHeight;
 		};
+		elemarray.click = function(){
+			return elemarray[0].click();
+		};
 
 		return elemarray;
 	};
@@ -155,9 +158,9 @@ define(function(require, exports, module){
 		options.async = options.async || true;
 		options.data = options.data || '';
 		options.header = options.header || {};
-		options.type = options.type || 'application/x-www-form-urlencoded';
+		options.contentType = options.contentType===undefined?'application/x-www-form-urlencoded':options.contentType;
 		if(/get/i.test(options.method)){
-			options.type = 'application/x-www-form-urlencoded';
+			options.contentType = 'application/x-www-form-urlencoded';
 		}
 
 		var xhr = new XMLHttpRequest();
@@ -174,7 +177,7 @@ define(function(require, exports, module){
 		};
 
 		var str = options.data;
-		if(options.type === 'application/x-www-form-urlencoded'){
+		if(options.contentType === 'application/x-www-form-urlencoded'){
 			str = '';
 		    for(var p in options.data){
 		    	str+=encodeURIComponent(p)+'='+encodeURIComponent(options.data[p])+'&';
@@ -188,7 +191,9 @@ define(function(require, exports, module){
 		}
 
 	    xhr.open(options.method,options.url,options.async);
-	    xhr.setRequestHeader('Content-Type', options.type);
+	    if(options.contentType!==false && options.contentType!==null){
+	    	xhr.setRequestHeader('Content-Type', options.contentType);
+	    }
 	    for(var p in options.header){
 	    	xhr.setRequestHeader(p, options.header[p]);
 	    }

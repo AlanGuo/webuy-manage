@@ -9,9 +9,16 @@ define(function(require, exports, module) {
 	var binders = {
 		value:function(node, onchange) {
 			if(onchange){
-		        node.addEventListener('keyup', function() {
-		            onchange(node.value);
-		        });
+				if(/input/i.test(node.tagName)){
+			        node.addEventListener('keyup', function() {
+			            onchange(node.value);
+			        });
+			    }
+			    else if(/select/i.test(node.tagName)){
+			    	node.addEventListener('change',function(){
+			    		onchange(node.value);
+			    	});
+			    }
 		    }
 	        return {
 	            updateProperty: function(value) {

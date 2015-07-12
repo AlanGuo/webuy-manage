@@ -18,12 +18,12 @@
 	<!-- content start -->
 	<div class="layout-cont">
 		<div class="box-infor">
-			<form action="">
-
+			<div class="layout-err-tips" id="errortips"></div>
+			<form action="javascript:;">
 				<div class="row-inpt">
 					<div class="att">商品标题：</div>
 					<div class="ctt left">
-						<input type="text">
+						<input type="text" bind-value="formdata.name">
 					</div>
 					<div class="hint left">
 						<p class="check-mark hide">
@@ -39,9 +39,9 @@
 				<div class="row-inpt">
 					<div class="att">商品分类：</div>
 					<div class="ctt left">
-						<select name="" id="">
-							<option value="1">请选择分类</option>
-							<option value="2">2</option>
+						<select name="" bind-value="formdata.type">
+							<option value="0">请选择分类</option>
+							<option value="1">拼布</option>
 						</select>
 					</div>
 					<div class="hint left">
@@ -58,7 +58,7 @@
 				<div class="row-inpt">
 					<div class="att">零售价格：</div>
 					<div class="ctt left">
-						<input type="tel" class="inprice" placeholder="0.00" > 元
+						<input type="tel" class="inprice" bind-value="formdata.price"> 元
 					</div>
 					<div class="hint left">
 						<p class="check-mark">
@@ -74,7 +74,7 @@
 				<div class="row-inpt">
 					<div class="att">上架时长：</div>
 					<div class="ctt left">
-						<input type="text"> 天
+						<input type="text" bind-value="formdata.timeleft"> 天
 					</div>
 					<div class="hint left">
 						<p class="check-mark">
@@ -90,7 +90,7 @@
 				<div class="row-inpt">
 					<div class="att">库存数量：</div>
 					<div class="ctt left">
-						<input type="text"> 件
+						<input type="text" bind-value="formdata.count"> 件
 					</div>
 					<div class="hint left">
 						<p class="check-mark hide">
@@ -104,13 +104,12 @@
 				</div>
 
 				<div class="row-inpt">
-					<div class="att left">
+					<div class="att left" bind-value="formdata.detail">
 						物品详情：
 						<span>(多图)</span>
 					</div>
 					<div class="ctt left">
 						<div class="box-detail">
-							xxxxxxx
 						</div>
 					</div>
 					<div class="hint left">
@@ -128,19 +127,16 @@
 					<div class="ctt">
 						<div class="show-window">
 							<!-- 缩略图展示 start 此处只显示一张图，用hide 来切换 -->
-							<div class="thumb-pic hide">
-								<img src="image/testlogo.jpg" alt="">
+							<div class="thumb-pic hide" bind-attr="class={bannerSelected}?'thumb-pic':'thumb-pic hide'">
+								<img src="image/testlogo.jpg" bind-attr="src=bannerData" alt="封面">
 								<a href="#nolink" class="close">
 									<span class="icon-x"></span>
 								</a>
 							</div>
 							<!-- 缩略图展示 end -->
-
-							<a href="#nolink" class="add-banner-pic">
+							<input type="file" data-change-event="bannerChange" bind-file="formdata.bannerFiles" style="display:none" accept="image/*" id="banner-file-choose">
+							<a data-click-event="uploadBanner" bind-attr="class={bannerSelected}?'add-pic hide':'add-pic'">
 								<span class="icon-add"></span>
-								<span class="loading hide">
-									<img class="w-100 show" src="image/loading.gif" alt="">
-								</span>
 							</a>
 						</div>
 						<!-- 提示 start -->
@@ -162,19 +158,16 @@
 					<div class="ctt">
 						<div class="show-window">
 							<!-- 缩略图展示 start 此处只显示一张图，用hide 来切换 -->
-							<div class="thumb-pic hide">
-								<img src="image/testlogo.jpg" alt="">
+							<div class="thumb-pic hide" bind-attr="class={coverSelected}?'thumb-pic':'thumb-pic hide'">
+								<img src="image/testlogo.jpg" bind-attr="src=coverData" alt="封面">
 								<a href="#nolink" class="close">
 									<span class="icon-x"></span>
 								</a>
 							</div>
 							<!-- 缩略图展示 end -->
-							<input type="file" data-change-event="filechange" bind-file="files" style="display:none" accept="image/*" id="file-choose">
-							<a data-click-event="uploadCover" class="add-pic">
-								<span class="icon-add" bind-attr="class={uploading}?'icon-add hide':'icon-add'"></span>
-								<span class="loading hide" bind-attr="class={uploading}?'loading':'loading hide'">
-									<img class="w-100 show" src="image/loading.gif" alt="">
-								</span>
+							<input type="file" data-change-event="coverChange" bind-file="formdata.coverFiles" style="display:none" accept="image/*" id="cover-file-choose">
+							<a data-click-event="uploadCover" bind-attr="class={coverSelected}?'add-pic hide':'add-pic'">
+								<span class="icon-add"></span>
 							</a>
 						</div>
 						<!-- 提示 start -->
@@ -215,9 +208,9 @@
 				<div class="row-inpt">
 					<div class="att">&nbsp;</div>
 					<div class="ctt">
-						<a href="#nolink" class="btn-confirm">保存</a>
-						<a href="#nolink" class="btn-confirm">保存并上架</a>
-						<a href="#nolink" class="btn-confirm">预览</a>
+						<a href="javascript:;" class="btn-confirm" data-click-event="save">保存</a>
+						<a href="javascript:;" class="btn-confirm" data-click-event="saveAndPublish">保存并上架</a>
+						<!-- <a href="javascript:;" class="btn-confirm" data-click-event="preview">预览</a> -->
 					</div>
 				</div>
 

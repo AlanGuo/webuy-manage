@@ -46,7 +46,7 @@ define(function (require, exports, module) {
                 success = options.success,
                 error = options.error,
                 button = options.button,
-                type = options.type,
+                type = options.contentType || request.contentType,
                 eventName = null;
                 //恢复按钮
                 if(button){
@@ -98,7 +98,7 @@ define(function (require, exports, module) {
             this.isBusy = true;
             (function(pbar){
                 returnVal = $.ajax({
-                    type:type,
+                    contentType:type,
                     method: method,
                     url: url,
                     data: data,

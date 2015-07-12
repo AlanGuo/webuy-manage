@@ -12,7 +12,8 @@ var security = {
 			height:35,
 			offset:22,
 			fontsize:32,
-			generate:function(){//Custom the function to generate captcha text
+			generate:function(){
+				//Custom the function to generate captcha text
 		        //generate captcha text here
 		        //return the captcha text
 		        var text = (Math.random()*10000).toPrecision(4).replace(/\./,'');
