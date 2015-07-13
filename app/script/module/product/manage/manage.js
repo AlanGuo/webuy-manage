@@ -6,6 +6,7 @@ define(function (require, exports, module) {
         request = require('request'),
         asyncRequest = require('asyncrequest'),
         binder = require('binder'),
+        env = require('env'),
         CustomSideBarView = require('CustomSideBarView');
 
     var ProductManagePageView = CustomSideBarView.extend({
@@ -17,6 +18,7 @@ define(function (require, exports, module) {
         //绑定的数据
         data:{
             activeTab:'offthecourt',
+            cdn:env.cdn,
             gridData:[]
         },
 

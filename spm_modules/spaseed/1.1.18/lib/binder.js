@@ -45,7 +45,7 @@ define(function(require, exports, module) {
 	    content: function(node) {
 	        return {
 	            updateProperty: function(value) {
-	                node.innerText = value;
+	            	node.innerText = value;
 	            }
 	        };
 	    },
@@ -77,7 +77,6 @@ define(function(require, exports, module) {
 	var bindEngine = {
 		bind:function(container, object){
 			function getDirectObject(object, property){
-				
 				var getdo = function(object, propertyName){
 					var val = object;
 					//properties是对象
@@ -101,7 +100,7 @@ define(function(require, exports, module) {
 			}
 
 			function parseExpr(expr, object){
-				var props = expr.match(/\{.*?\}/),
+				var props = expr.match(/\{.*?\}/g),
 					isexpr = false,
 					dobjects = [],
 					dproperties = [];
@@ -109,7 +108,7 @@ define(function(require, exports, module) {
 				if(props){
 					for(var i=0;i<props.length;i++){
 						props[i] = props[i].replace(/\{|\}/g,'');
-						expr = expr.replace(new RegExp('\\{'+props[i]+'\\}','g'), props[i]);
+						expr = expr.replace(new RegExp('\\{'+props[i].replace(/\$/g,'\\$')+'\\}','g'), props[i]);
 						dobjects.push(getDirectObject(object,props[i]));
 						dproperties.push(props[i].split('.').slice(-1)[0]);
 					}
@@ -228,18 +227,22 @@ define(function(require, exports, module) {
 		            return bindEngine.bind(elem, obj);
 		        };
 		        //根据array生成bindings
-		        var bindings = array.map(bindItem);
-
+		        var bindings = array.map(function(item){
+		        	object.$item = item;
+		        	bindItem(object);
+		        });
 
 		        var arrObserver = function(changes) {
 		            changes.forEach(function(change) {
 		                var index = parseInt(change.name, 10), child;
 		                if (isNaN(index)) return;
 		                if (change.type === 'add') {
-		                    bindings.push(bindItem(array[index]));
+		                	object.$item = array[index];
+		                    bindings.push(bindItem(object));
 		                } else if (change.type === 'update') {
 		                    bindings[index].unobserve();
-		                    bindEngine.bind(parent.children[index], array[index]);
+		                    object.$item = array[index];
+		                    bindEngine.bind(parent.children[index], object);
 		                } else if (change.type === 'delete') {
 		                    bindings.pop().unobserve();
 		                    child = parent.children[index];

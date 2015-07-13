@@ -27,7 +27,7 @@ var product ={
 						'product_serial',
 						'product_name',
 						'pt_name',
-						'product_image',
+						'product_cover',
 						'product_price',
 						'product_count',
 						'product_timeleft',
@@ -109,7 +109,7 @@ var product ={
 								
 								var promiseArray = [];
 								if(files.coverFiles){
-									var coverfield = productDir+path.sep+'cover.jpg';
+									var coverfield = path.sep+productDir+path.sep+'cover.jpg';
 									var coversource = fs.createReadStream(files.coverFiles[0].path);
 									var coverdest = fs.createWriteStream(filepath+path.sep+'cover.jpg');
 
@@ -129,7 +129,7 @@ var product ={
 								}
 
 								if(files.bannerFiles){
-									var bannerfield = productDir+path.sep+'banner.jpg';
+									var bannerfield = path.sep+productDir+path.sep+'banner.jpg';
 									var bannersource = fs.createReadStream(files.bannerFiles[0].path);
 									var bannerdest = fs.createWriteStream(filepath+path.sep+'banner.jpg');
 
@@ -150,6 +150,7 @@ var product ={
 								//其他数据
 								var databasePromise = new Promise(function(resolve, reject){
 									var comlumns = [
+											'product_serial',
 											'product_name', 
 											'product_type', 
 											'product_price', 
@@ -166,6 +167,7 @@ var product ={
 
 										var date = new Date();
 										var values = [
+											fields.serial,
 											fields.name,
 											fields.type,
 											fields.price,
@@ -215,7 +217,7 @@ var product ={
 						});
 		      	}
 		      	else{
-		      		console.log(err);
+		      		console.error(err);
 					util.jsonRespond(response,{
 						code:501,
 						data:{},

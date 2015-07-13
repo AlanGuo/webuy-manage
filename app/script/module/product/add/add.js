@@ -19,6 +19,7 @@ define(function (require, exports, module) {
             bannerData:'',
             bannerSelected:false,
             formdata:{
+                serial:'',
                 name:'',
                 type:0,
                 price:0,

@@ -69,23 +69,23 @@
 								<td>
 									<input type="checkbox">
 								</td>
-								<td bind-content="product_serial">
+								<td bind-content="$item.product_serial">
 								</td>
 								<td>
-									<a href="#nolink" bind-content="product_name">
+									<a href="#nolink" bind-content="$item.product_name">
 									</a>
 								</td>
 								<td>
-									<img bind-attr="src=product_image,alt=product_name">
+									<img bind-attr="src=cdn+{$item.product_cover},alt=$item.product_name">
 								</td>
 								<td>
-									<a href="javascript:;" bind-content="pt_name">
+									<a href="javascript:;" bind-content="$item.pt_name">
 									</a>
 								</td>
-								<td bind-content="{product_price}/100"></td>
-								<td bind-content="product_count">
+								<td bind-content="{$item.product_price}/100"></td>
+								<td bind-content="$item.product_count">
 								</td>
-								<td bind-content="product_timeleft">
+								<td bind-content="$item.product_timeleft">
 								</td>
 								<td>
 									<div class="status">待上架</div>

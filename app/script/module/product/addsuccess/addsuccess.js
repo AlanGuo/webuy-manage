@@ -13,7 +13,6 @@ define(function (require, exports, module) {
                 sidebar:sidebar,
                 container:template('product/addsuccess')
             });
-            this.binderObject = binder.bind(this.$elem,this.data);
         },
 
         events:{
