@@ -92,7 +92,7 @@ var product ={
 			form.parse(request, function(err, fields, files) {
 				if(!err){
 					connection.pool.getConnection(function(err, connection){
-						var productDir = new Date()*1;
+						var productDir = 'product'+path.sep+new Date()*1;
 						var filepath = path.resolve(rootDirection+productDir);
 						fs.mkdir(filepath,function(err){
 							if(err){
@@ -106,10 +106,9 @@ var product ={
 								});
 							}
 							else{
-								
 								var promiseArray = [];
 								if(files.coverFiles){
-									var coverfield = path.sep+productDir+path.sep+'cover.jpg';
+									var coverfield = productDir+path.sep+'cover.jpg';
 									var coversource = fs.createReadStream(files.coverFiles[0].path);
 									var coverdest = fs.createWriteStream(filepath+path.sep+'cover.jpg');
 
@@ -129,7 +128,7 @@ var product ={
 								}
 
 								if(files.bannerFiles){
-									var bannerfield = path.sep+productDir+path.sep+'banner.jpg';
+									var bannerfield = productDir+path.sep+'banner.jpg';
 									var bannersource = fs.createReadStream(files.bannerFiles[0].path);
 									var bannerdest = fs.createWriteStream(filepath+path.sep+'banner.jpg');
 

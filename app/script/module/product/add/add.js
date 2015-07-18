@@ -83,10 +83,10 @@ define(function (require, exports, module) {
                     $('#banner-file-choose').click();
                 },
                 'save':function(){
-                    this.sendData(0);
+                    this.prepare(0);
                 },
                 'saveAndPublish':function(){
-                    this.sendData(1);
+                    this.prepare(1);
                 }
             },
             'change':{

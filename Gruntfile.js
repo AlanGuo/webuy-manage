@@ -33,7 +33,7 @@ module.exports = function (grunt) {
   };
 
   var cdn = '/',
-      local = '/',
+      local = 'http://58.96.185.53:1101/',
       localstorageJSPrefix = cdn + 'script/',
       localstorageCSSPrefix = cdn + 'style/',
       localstorageCSSLocalPrefix = local + 'style/',
