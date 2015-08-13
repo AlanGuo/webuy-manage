@@ -33,7 +33,7 @@ module.exports = function (grunt) {
   };
 
   var cdn = '/',
-      local = 'http://58.96.185.53:1101/',
+      local = '/',
       localstorageJSPrefix = cdn + 'script/',
       localstorageCSSPrefix = cdn + 'style/',
       localstorageCSSLocalPrefix = local + 'style/',
@@ -226,8 +226,30 @@ module.exports = function (grunt) {
               return [
                 
                 require('grunt-connect-proxy/lib/utils').proxyRequest,
-                
                 rewriteRulesSnippet,
+                function(req, res, next){
+                  if(/\.js/.test(req.url)){
+                    //如果是js文件
+                    fs.readFile('.'+req.url, function(error, content) {
+                      if(error){
+                        res.writeHead(500);
+                        res.end();
+                      }else{
+                        res.writeHead(200,{
+                          'content-type':'application/javascript'
+                        });
+                        //加cmd prefix
+                        if(/module\.exports/.test(content) && !/define\(function\s*?\(/.test(content)){
+                          content = 'define(function (require, exports, module) {\n'+content+'\n});';
+                        }
+                        res.end(content);
+                      }
+                    });
+                  }
+                  else{
+                    return next();
+                  }
+                },
                 connect.static('tmp'),
                 connect().use(
                   '/bower_components',
